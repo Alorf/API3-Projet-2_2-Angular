@@ -1,0 +1,44 @@
+<form class="form-control w-full max-w-xs" >
+  <label class="label">
+    <span class="label-text">Nom</span>
+  </label>
+  <input
+    type="text"
+    placeholder="Nom"
+    class="input input-bordered w-full max-w-xs"
+    formControlName="nom"
+  />
+
+  <label class="label">
+    <span class="label-text">Prénom</span>
+  </label>
+  <input
+    type="text"
+    placeholder="Prénom"
+    class="input input-bordered w-full max-w-xs"
+    formControlName="prenom"
+  />
+
+  <label class="label">
+    <span class="label-text">Mail</span>
+  </label>
+  <input
+    type="email"
+    placeholder="Mail"
+    class="input input-bordered w-full max-w-xs"
+    formControlName="mail"
+  />
+
+  <label class="label">
+    <span class="label-text">Téléphone</span>
+  </label>
+  <input
+    type="text"
+    placeholder="Téléphone"
+    class="input input-bordered w-full max-w-xs"
+    formControlName="tel"
+  />
+
+  <button type="button" (click)="onSaveClient()" class="btn btn-primary">Ajouter</button>
+
+</form>

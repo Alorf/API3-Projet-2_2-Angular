@@ -1,0 +1,44 @@
+
+<form class="join" #f="ngForm" (ngSubmit)="onSearch(f.value)">
+    <input type="text" ngModel name="nom" placeholder="Type here" class="input input-bordered input-primary w-full max-w-xs join-item" />
+    <button class="btn btn-primary join-item">Rechercher</button>    
+</form>
+<button class="btn btn-primary" (click)="onNewClient()">Ajouter</button>  
+
+<ng-container *ngIf="clients">
+    <ng-container *ngIf="clients.length>0 else inconnu"> 
+
+    <div class="overflow-x-auto">
+        <table class="table">
+          <!-- head -->
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Nom</th>
+              <th>Prénom</th>
+              <th>Mail</th>
+              <th>Téléphone</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- row 1 -->
+            <tr *ngFor="let c of clients">
+              <th>{{c.id}}</th>
+              <td>{{c.nom}}</td>
+              <td>{{c.prenom}}</td>
+              <td>{{c.mail}}</td>
+              <td>{{c.tel}}</td>
+              <td>
+                <button class="btn btn-success" (click)="onEdit(c)">Modifier</button>
+                <button class="btn btn-error" (click)="onDelete(c)">Supprimer</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+</ng-container>
+<ng-template #inconnu>
+    Nom inconnu
+</ng-template>
+</ng-container> 
