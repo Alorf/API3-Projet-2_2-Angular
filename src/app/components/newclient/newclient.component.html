@@ -1,44 +1,105 @@
-<form class="form-control w-full max-w-xs" >
-  <label class="label">
-    <span class="label-text">Nom</span>
-  </label>
-  <input
-    type="text"
-    placeholder="Nom"
-    class="input input-bordered w-full max-w-xs"
-    formControlName="nom"
-  />
+<form
+  class="form-control w-full max-w-xs"
+  [formGroup]="clientFormGroup"
+  *ngIf="clientFormGroup"
+>
+  <div class="form-control">
+    <label class="label">
+      <span class="label-text">Nom</span>
+    </label>
+    <input
+      type="text"
+      placeholder="Nom"
+      class="input input-bordered w-full max-w-xs"
+      formControlName="nom"
+      [ngClass]="{
+        'input-error': submitted && clientFormGroup.controls.nom.errors
+      }"
+    />
+    <label *ngIf="submitted && clientFormGroup.controls.nom.errors">
+      <span *ngIf="clientFormGroup.controls.nom.errors.required">
+        Nom obligatoire
+      </span>
+      <span *ngIf="clientFormGroup.controls.nom.errors.minLength">
+        Nom doit être plus grand que 2 charactères
+      </span>
+      <span *ngIf="clientFormGroup.controls.nom.errors.maxLength">
+        Nom doit être plus petit que 50 charactères
+      </span>
+    </label>
+  </div>
 
-  <label class="label">
-    <span class="label-text">Prénom</span>
-  </label>
-  <input
-    type="text"
-    placeholder="Prénom"
-    class="input input-bordered w-full max-w-xs"
-    formControlName="prenom"
-  />
+  <div class="form-control">
+    <label class="label">
+      <span class="label-text">Prénom</span>
+    </label>
+    <input
+      type="text"
+      placeholder="Prénom"
+      class="input input-bordered w-full max-w-xs"
+      formControlName="prenom"
+      [ngClass]="{
+        'input-error': submitted && clientFormGroup.controls.prenom.errors
+      }"
+    />
+    <label *ngIf="submitted && clientFormGroup.controls.prenom.errors">
+      <span *ngIf="clientFormGroup.controls.prenom.errors.required">
+        Nom obligatoire
+      </span>
+      <span *ngIf="clientFormGroup.controls.prenom.errors.minLength">
+        Nom doit être plus grand que 2 charactères
+      </span>
+      <span *ngIf="clientFormGroup.controls.prenom.errors.maxLength">
+        Nom doit être plus petit que 50 charactères
+      </span>
+    </label>
+  </div>
+  <div class="form-control">
+    <label class="label">
+      <span class="label-text">Mail</span>
+    </label>
+    <input
+      type="email"
+      placeholder="Mail"
+      class="input input-bordered w-full max-w-xs"
+      formControlName="mail"
+      [ngClass]="{
+        'input-error': submitted && clientFormGroup.controls.mail.errors
+      }"
+    />
+    <label *ngIf="submitted && clientFormGroup.controls.mail.errors">
+      <span *ngIf="clientFormGroup.controls.mail.errors.required">
+        Mail obligatoire
+      </span>
+      <span *ngIf="clientFormGroup.controls.mail.errors.email">
+        Mail invalide
+      </span>
+    </label>
+  </div>
+  <div class="form-control">
+    <label class="label">
+      <span class="label-text">Téléphone</span>
+    </label>
+    <input
+      type="text"
+      placeholder="Téléphone"
+      class="input input-bordered w-full max-w-xs"
+      formControlName="tel"
+      [ngClass]="{
+        'input-error': submitted && clientFormGroup.controls.tel.errors
+      }"
+    />
+    <label *ngIf="submitted && clientFormGroup.controls.tel.errors">
+      <span *ngIf="clientFormGroup.controls.tel.errors.required">
+        Téléphone obligatoire
+      </span>
+      <span *ngIf="clientFormGroup.controls.tel.errors.pattern">
+        Téléphone invalide
+      </span>
+    </label>
+  </div>
 
-  <label class="label">
-    <span class="label-text">Mail</span>
-  </label>
-  <input
-    type="email"
-    placeholder="Mail"
-    class="input input-bordered w-full max-w-xs"
-    formControlName="mail"
-  />
-
-  <label class="label">
-    <span class="label-text">Téléphone</span>
-  </label>
-  <input
-    type="text"
-    placeholder="Téléphone"
-    class="input input-bordered w-full max-w-xs"
-    formControlName="tel"
-  />
-
-  <button type="button" (click)="onSaveClient()" class="btn btn-primary">Ajouter</button>
-
+  <button (click)="onSaveClient()" class="btn btn-primary">Ajouter</button>
 </form>
+
+<app-alert #alertComponent></app-alert>

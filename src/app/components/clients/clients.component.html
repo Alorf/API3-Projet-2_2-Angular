@@ -1,14 +1,23 @@
+<app-alert></app-alert>
 
-<form class="join" #f="ngForm" (ngSubmit)="onSearch(f.value)">
-    <input type="text" ngModel name="nom" placeholder="Type here" class="input input-bordered input-primary w-full max-w-xs join-item" />
-    <button class="btn btn-primary join-item">Rechercher</button>    
-</form>
-<button class="btn btn-primary" (click)="onNewClient()">Ajouter</button>  
+<div>
+  <div class="flex justify-between py-2">
+    <form class="join" #f="ngForm" (ngSubmit)="onSearch(f.value)">
+      <input
+        type="text"
+        ngModel
+        name="nom"
+        placeholder="Type here"
+        class="input input-bordered input-primary w-full max-w-xs join-item"
+      />
+      <button class="btn btn-primary join-item">Rechercher</button>
+    </form>
+    <button class="btn btn-primary" (click)="onNewClient()">Ajouter</button>
+  </div>
 
-<ng-container *ngIf="clients">
-    <ng-container *ngIf="clients.length>0 else inconnu"> 
-
-    <div class="overflow-x-auto">
+  <ng-container *ngIf="clients">
+    <ng-container *ngIf="clients.length > 0; else inconnu">
+      <div class="overflow-x-auto">
         <table class="table">
           <!-- head -->
           <thead>
@@ -24,21 +33,77 @@
           <tbody>
             <!-- row 1 -->
             <tr *ngFor="let c of clients">
-              <th>{{c.id}}</th>
-              <td>{{c.nom}}</td>
-              <td>{{c.prenom}}</td>
-              <td>{{c.mail}}</td>
-              <td>{{c.tel}}</td>
-              <td>
-                <button class="btn btn-success" (click)="onEdit(c)">Modifier</button>
-                <button class="btn btn-error" (click)="onDelete(c)">Supprimer</button>
+              <th>{{ c.id }}</th>
+              <td>{{ c.nom }}</td>
+              <td>{{ c.prenom }}</td>
+              <td>{{ c.mail }}</td>
+              <td>{{ c.tel }}</td>
+              <td class="join">
+                <button class="join-item btn btn-success" (click)="onEdit(c)">
+                  Modifier
+                </button>
+                <button class="join-item btn btn-error" (click)="openDeleteModal(c)">
+                  Supprimer
+                </button>
               </td>
             </tr>
           </tbody>
         </table>
+        <div class="join">
+          <button
+            class="join-item btn"
+            [disabled]="isButtonPreviousDisabled"
+            (click)="pagePrevious()"
+          >
+            «
+          </button>
+          <button class="join-item btn">Page {{ page + 1 }}</button>
+          <button
+            class="join-item btn"
+            [disabled]="isButtonNextDisabled"
+            (click)="pageNext()"
+          >
+            »
+          </button>
+        </div>
       </div>
-</ng-container>
-<ng-template #inconnu>
-    Nom inconnu
-</ng-template>
-</ng-container> 
+    </ng-container>
+    <ng-template #inconnu>
+      <table class="table">
+        <!-- head -->
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Mail</th>
+            <th>Téléphone</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="w-full">
+            <td colspan="5" classs="text-center">Aucun client</td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-template>
+  </ng-container>
+</div>
+
+<!-- Open the modal using ID.showModal() method -->
+<dialog #deleteModal class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Voulez-vous vraiment supprimer {{nom}}?</h3>
+    <p class="py-4">Cela supprimera définitivement ce client</p>
+    <div class="modal-action">
+      <form method="dialog">
+        <button class="btn btn-error" (click)="onDelete()">Oui</button>
+        <button class="btn">Non</button>
+      </form>
+    </div>
+  </div>
+</dialog>
+
+<app-alert #alertComponent></app-alert>
+

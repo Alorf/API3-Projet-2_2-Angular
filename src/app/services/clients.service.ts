@@ -28,12 +28,21 @@ export class ClientsService {
     return this.http.get<Client[]>(this.host + '/clients/nom=' + nom);
   }
 
+  getPaginatorClients(page: number, size : number, sort: string){
+    return this.http.get<Client[]>(this.host + '/clients/allp?page=' + page + '&size='+ size +'&sort=' + sort);
+
+  }
+
   deleteClient(c: Client): Observable<void> {
     return this.http.delete<void>(this.host + '/clients/' + c.id);
   }
   save(c: Client): Observable<Client> {
-    return this.http.post<Client>(this.host + '/clients/', c);
-  }
+    return this.http.post<Client>(this.host + '/clients', c, {
+
+      headers: { 'Access-Control-Allow-Origin': '*' },
+
+    });
+    }
 
   updateClient(c: Client): Observable<Client> {
     return this.http.put<Client>(this.host + '/clients/' + c.id, c);
