@@ -11,6 +11,7 @@ import { LocationsComponent } from './components/locations/locations.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NewclientComponent } from './components/newclient/newclient.component';
 import { AlertComponent } from './components/tools/alert/alert.component';
+import { EditclientComponent } from './components/editclient/editclient.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { AlertComponent } from './components/tools/alert/alert.component';
     ClientsComponent,
     LocationsComponent,
     NewclientComponent,
-    AlertComponent
+    AlertComponent,
+    EditclientComponent
   ],
   imports: [
     BrowserModule,

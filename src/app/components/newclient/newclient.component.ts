@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ClientsService } from '../../services/clients.service';
 import { Router } from '@angular/router';
 import { AlertComponent } from '../tools/alert/alert.component';
+import { AlertType } from '../tools/alert/enums/alert-type.enum';
 
 @Component({
   selector: 'app-newclient',
@@ -14,30 +15,33 @@ export class NewclientComponent implements OnInit {
   @ViewChild('alertComponent') alertComponent: AlertComponent | undefined;
   submitted = false;
 
-  constructor(private fb: FormBuilder, private clientService: ClientsService, private router: Router) {}
-
+  constructor(private fb: FormBuilder, private clientService: ClientsService) {}
 
   ngOnInit(): void {
     this.clientFormGroup = this.fb.group({
-      nom: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      nom: ['', [Validators.required, Validators.min(2), Validators.max(50)]],
       prenom: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       mail: ['', [Validators.required, Validators.email]],
-      tel: ['+32(0) ', [Validators.required, Validators.pattern(/^\+32\(0\)\s\d{3}\s\d{2}\s\d{2}$/)]],
+      tel: ['+32(0) ', [Validators.required]],
     });
   }
 
   onSaveClient() {
-    this.submitted = true; 
-    if (this.clientFormGroup?.invalid) { return; }
-    
-    this.clientService.save(this.clientFormGroup?.value).subscribe(
-      () => this.alertComponent?.show("ok", "sauvegarde ok"),
-      (err) => {
-        this.alertComponent?.show("error", err.headers.get('error'))
-      }
-    );
+    this.submitted = true;
+    if (this.clientFormGroup?.invalid) {
+      return;
+    }
 
-    //route to clients
-    //this.router.navigateByUrl('/client');
+    this.clientService.save(this.clientFormGroup?.value).subscribe(
+      () => {
+        this.alertComponent?.show(AlertType.ok, 'sauvegarde ok');
+        setTimeout(() => {
+          this.alertComponent?.hide();
+        }, 5000);
+      },
+      err => {
+        this.alertComponent?.show(AlertType.error, err.headers.get('error'));
+      },
+    );
   }
 }

@@ -33,13 +33,11 @@
       }"
     />
     <label *ngIf="submitted && clientFormGroup.controls.prenom.errors">
-      <span *ngIf="clientFormGroup.controls.prenom.errors.minLength">
-        prénom doit être plus grand que 2 charactères
-      </span>
+      <span *ngIf="clientFormGroup.controls.prenom.errors.required"> Nom obligatoire </span>
+      <span *ngIf="clientFormGroup.controls.prenom.errors.minLength"> Nom doit être plus grand que 2 charactères </span>
       <span *ngIf="clientFormGroup.controls.prenom.errors.maxLength">
-        prénom doit être plus petit que 50 charactères
+        Nom doit être plus petit que 50 charactères
       </span>
-      <span *ngIf="clientFormGroup.controls.prenom.errors.required"> prénom obligatoire </span>
     </label>
   </div>
   <div>
@@ -56,8 +54,8 @@
       }"
     />
     <label *ngIf="submitted && clientFormGroup.controls.mail.errors">
-      <span *ngIf="clientFormGroup.controls.mail.errors.email"> Mail invalide </span>
       <span *ngIf="clientFormGroup.controls.mail.errors.required"> Mail obligatoire </span>
+      <span *ngIf="clientFormGroup.controls.mail.errors.email"> Mail invalide </span>
     </label>
   </div>
   <div>
@@ -78,7 +76,7 @@
     </label>
   </div>
 
-  <button (click)="onSaveClient()" class="btn btn-primary">Ajouter</button>
+  <button (click)="onUpdateClient()" class="btn btn-primary">Modifier</button>
 </form>
 
 <app-alert #alertComponent></app-alert>
