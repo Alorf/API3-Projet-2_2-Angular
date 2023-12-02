@@ -41,13 +41,13 @@ export class NewlocationComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.client === undefined) {
-      this.taxisService.getAllTaxis().subscribe((taxis: Taxi[]) => {
-        this.taxis = taxis;
+      this.clientsService.getAllClients().subscribe((clients: Client[]) => {
+        this.clients = clients;
       });
     }
 
-    this.clientsService.getAllClients().subscribe((clients: Client[]) => {
-      this.clients = clients;
+    this.taxisService.getAllTaxis().subscribe((taxis: Taxi[]) => {
+      this.taxis = taxis;
     });
 
     this.adressesService.getAllAdresses().subscribe((adresses: Adresse[]) => {
