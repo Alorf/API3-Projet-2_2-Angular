@@ -1,0 +1,104 @@
+<form class="form-control gap-4 w-full max-w-xs pr-8" [formGroup]="locationFormGroup" *ngIf="locationFormGroup">
+  <div>
+    <label class="form-control w-full max-w-xs">
+      <div class="label">
+        <span class="label-text">Client</span>
+      </div>
+      <select
+        formControlName="idclient"
+        class="select select-bordered"
+        [ngClass]="{
+          'input-error': submitted && locationFormGroup.controls.idadresse.errors
+        }"
+      >
+        <option value="{{ client.id }}" *ngIf="client != undefined" selected>{{ client?.mail }}</option>
+        <option value="{{ client.id }}" *ngFor="let client of clients">{{ client?.mail }}</option>
+      </select>
+      <div class="label" *ngIf="submitted && locationFormGroup.controls.idclient.errors">
+        <span class="text-red-500"> Client obligatoire </span>
+      </div>
+    </label>
+  </div>
+
+  <div>
+    <label class="form-control w-full max-w-xs">
+      <div class="label">
+        <span class="label-text">Adresse</span>
+      </div>
+      <select
+        formControlName="idadresse"
+        class="select select-bordered"
+        [ngClass]="{
+          'input-error': submitted && locationFormGroup.controls.idadresse.errors
+        }"
+      >
+        <option value="{{ adresse.id }}" *ngFor="let adresse of adresses">
+          {{ adresse.rue }} {{ adresse.num }}, {{ adresse.localite }} {{ adresse.cp }}
+        </option>
+      </select>
+      <div class="label" *ngIf="submitted && locationFormGroup.controls.idadresse.errors">
+        <span class="text-red-500"> Adresse obligatoire </span>
+      </div>
+    </label>
+  </div>
+
+  <div>
+    <label class="label">
+      <span class="label-text">Date de la location</span>
+    </label>
+    <input
+      type="date"
+      placeholder="date"
+      class="input input-bordered w-full max-w-xs"
+      formControlName="dateloc"
+      [ngClass]="{
+        'input-error': submitted && locationFormGroup.controls.dateloc.errors
+      }"
+    />
+    <label *ngIf="submitted && locationFormGroup.controls.dateloc.errors">
+      <span class="text-red-500" *ngIf="locationFormGroup.controls.dateloc.errors.required">
+        Date de location obligatoire
+      </span>
+    </label>
+  </div>
+  <div>
+    <label class="label">
+      <span class="label-text">Kilomètre total</span>
+    </label>
+    <input
+      type="number"
+      placeholder="Km total"
+      class="input input-bordered w-full max-w-xs"
+      formControlName="kmTotal"
+      [ngClass]="{
+        'input-error': submitted && locationFormGroup.controls.kmTotal.errors
+      }"
+    />
+    <label *ngIf="submitted && locationFormGroup.controls.kmTotal.errors">
+      <span class="text-red-500" *ngIf="locationFormGroup.controls.kmTotal.errors.required"> kmTotal obligatoire </span>
+    </label>
+  </div>
+  <!--
+      <div>
+        <label class="form-control w-full max-w-xs">
+          <div class="label">
+            <span class="label-text">Taxi</span>
+          </div>
+          <select
+            class="select select-bordered"
+            [ngClass]="{
+              'input-error': submitted && locationFormGroup.controls.dateloc.errors
+            }"
+          >
+            <option *ngFor="let taxi of taxis">{{ taxi.immatriculation }}</option>
+          </select>
+          <div class="label" *ngIf="submitted && locationFormGroup.controls.dateloc.errors">
+            <span> client obligatoire </span>
+          </div>
+        </label>
+      </div>
+      -->
+
+  <button (click)="onSaveLocation()" class="btn btn-primary">Ajouter</button>
+</form>
+<app-alert #alertComponent></app-alert>

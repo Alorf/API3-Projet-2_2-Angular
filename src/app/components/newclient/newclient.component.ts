@@ -15,7 +15,7 @@ export class NewclientComponent implements OnInit {
   @ViewChild('alertComponent') alertComponent: AlertComponent | undefined;
   submitted = false;
 
-  constructor(private fb: FormBuilder, private clientService: ClientsService) {}
+  constructor(private fb: FormBuilder, private clientService: ClientsService, private route: Router) {}
 
   ngOnInit(): void {
     this.clientFormGroup = this.fb.group({

@@ -10,7 +10,7 @@ module.exports = {
     },
   },
   daisyui: {
-    themes: ['cyberpunk'],
+    themes: ['light'],
   },
   plugins: [require('@tailwindcss/typography'), require('daisyui')],
 };

@@ -1,4 +1,4 @@
-<form class="form-control w-full max-w-xs" [formGroup]="clientFormGroup" *ngIf="clientFormGroup">
+<form class="form-control gap-4 w-full max-w-xs" [formGroup]="clientFormGroup" *ngIf="clientFormGroup">
   <div>
     <label class="label">
       <span class="label-text">Nom</span>
@@ -80,5 +80,4 @@
 
   <button (click)="onSaveClient()" class="btn btn-primary">Ajouter</button>
 </form>
-
 <app-alert #alertComponent></app-alert>

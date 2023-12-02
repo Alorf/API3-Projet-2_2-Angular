@@ -1,10 +1,11 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { Client } from '../../entities/clients.entities';
 import { ClientsService } from '../../services/clients.service';
 import { Router } from '@angular/router';
 import { last, timeout } from 'rxjs';
 import { AlertComponent } from '../tools/alert/alert.component';
 import { AlertType } from '../tools/alert/enums/alert-type.enum';
+import { DrawerMode } from '../tools/Enum/drawer-mode';
 
 @Component({
   selector: 'app-clients',
@@ -12,14 +13,21 @@ import { AlertType } from '../tools/alert/enums/alert-type.enum';
   styleUrl: './clients.component.css',
 })
 export class ClientsComponent implements OnInit {
+  DrawerMode = DrawerMode;
+
   @ViewChild('deleteModal') deleteModal!: ElementRef;
+  @ViewChild('locationModal') locationModal!: ElementRef;
+
   @ViewChild('alertComponent', { static: false }) alertComponent: AlertComponent | undefined;
 
+  drawerMode: DrawerMode = DrawerMode.add;
+
+
   clients?: Client[];
-  isEditing = false;
   clientSelected?: Client;
 
   nom: string = '';
+  isSelected: boolean = false;
 
   constructor(private clientsService: ClientsService, private router: Router) {}
 
@@ -49,6 +57,16 @@ export class ClientsComponent implements OnInit {
     });
   }
 
+  reloadCurrentPage(page: number){
+    this.clientsService.getPaginatorClients(page, 5, 'nom').subscribe((data: any) => {
+      this.clients = data.content;
+      this.page = data.number;
+
+      if (data.last) this.isButtonNextDisabled = true;
+      if (data.first) this.isButtonPreviousDisabled = true;
+    });
+  }
+
   pagePrevious() {
     this.clientsService.getPaginatorClients(--this.page, 5, 'nom').subscribe((data: any) => {
       this.clients = data.content;
@@ -74,8 +92,7 @@ export class ClientsComponent implements OnInit {
 
   onNewClient() {
     //this.router.navigateByUrl('/newClient');
-    this.isEditing = false;
-
+    this.drawerMode = DrawerMode.add;
     // Open the drawer
     const drawerElement = document.getElementById('my-drawer') as HTMLInputElement;
     if (drawerElement) {
@@ -86,6 +103,17 @@ export class ClientsComponent implements OnInit {
   showModal() {
     if (this.deleteModal) {
       this.deleteModal.nativeElement.showModal();
+    }
+  }
+
+  openFilterDrawer(client: Client) {
+    this.drawerMode = DrawerMode.filter;
+    this.clientSelected = client;
+    console.log('clientSelected = ', this.clientSelected);
+    
+    const drawerElement = document.getElementById('my-drawer') as HTMLInputElement;
+    if (drawerElement) {
+      drawerElement.checked = true;
     }
   }
 
@@ -124,7 +152,7 @@ export class ClientsComponent implements OnInit {
   }
 
   editClient(c: Client) {
-    this.isEditing = true;
+    this.drawerMode = DrawerMode.edit;
     this.clientSelected = c;
 
     const drawerElement = document.getElementById('my-drawer') as HTMLInputElement;
@@ -135,5 +163,17 @@ export class ClientsComponent implements OnInit {
 
   onEdit(c: Client) {
     this.router.navigateByUrl('/editClient/' + c.id);
+  }
+
+  openLocation(){    
+    const drawerElement = document.getElementById('my-drawer') as HTMLInputElement;
+    if (drawerElement) {
+      drawerElement.checked = false;
+    }
+    //Set input of app-locations 
+
+    if (this.locationModal) {
+      this.locationModal.nativeElement.showModal();
+    }
   }
 }

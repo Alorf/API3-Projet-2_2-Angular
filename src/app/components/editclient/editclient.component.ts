@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { ClientsService } from '../../services/clients.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -11,7 +11,7 @@ import { Client } from '../../entities/clients.entities';
   templateUrl: './editclient.component.html',
   styleUrl: './editclient.component.css',
 })
-export class EditclientComponent {
+export class EditclientComponent implements OnInit, OnChanges{
   @ViewChild('alertComponent') alertComponent: AlertComponent | undefined;
   @Input({ required: true }) client: Client | undefined;
 
@@ -24,15 +24,7 @@ export class EditclientComponent {
   }
 
   ngOnInit(): void {
-    console.log(this.client);
-
-    this.clientFormGroup = this.fb.group({
-      id: [this.client?.id],
-      nom: [this.client?.nom, [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
-      prenom: [this.client?.prenom, [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
-      mail: [this.client?.mail, [Validators.required, Validators.email]],
-      tel: [this.client?.tel, [Validators.required]],
-    });
+    this.loadForm(this.client!);
     /*
     this.clientService.getClient(this.idClient).subscribe(client => {
       this.clientFormGroup = this.fb.group({
@@ -44,6 +36,23 @@ export class EditclientComponent {
       });
     });
     */
+  }
+
+  loadForm(client : Client){
+    this.clientFormGroup = this.fb.group({
+      id: [client.id],
+      nom: [client.nom, [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      prenom: [client.prenom, [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      mail: [client.mail, [Validators.required, Validators.email]],
+      tel: [client.tel, [Validators.required]],
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {        
+    if (changes.client && changes.client.currentValue && this.client !== undefined) {
+      this.client = changes.client.currentValue;
+      this.loadForm(changes.client.currentValue);
+    }
   }
 
   onUpdateClient(): void {

@@ -14,23 +14,20 @@ export class ClientsService {
     return this.http.get<Client>(this.host + '/clients/' + idclient);
   }
 
-  searchClientUnique(
-    nom: string,
-    prenom: string,
-    tel: string
-  ): Observable<Client[]> {
-    return this.http.get<Client[]>(
-      this.host + '/clients/' + nom + '/' + prenom + '/' + tel
-    );
+  searchClientUnique(nom: string, prenom: string, tel: string): Observable<Client[]> {
+    return this.http.get<Client[]>(this.host + '/clients/' + nom + '/' + prenom + '/' + tel);
+  }
+
+  getAllClients(): Observable<Client[]> {
+    return this.http.get<Client[]>(this.host + '/clients/all');
   }
 
   searchClients(nom: string): Observable<Client[]> {
     return this.http.get<Client[]>(this.host + '/clients/nom=' + nom);
   }
 
-  getPaginatorClients(page: number, size : number, sort: string){
-    return this.http.get<Client[]>(this.host + '/clients/allp?page=' + page + '&size='+ size +'&sort=' + sort);
-
+  getPaginatorClients(page: number, size: number, sort: string) {
+    return this.http.get<Client[]>(this.host + '/clients/allp?page=' + page + '&size=' + size + '&sort=' + sort);
   }
 
   deleteClient(c: Client): Observable<void> {
@@ -38,11 +35,9 @@ export class ClientsService {
   }
   save(c: Client): Observable<Client> {
     return this.http.post<Client>(this.host + '/clients', c, {
-
       headers: { 'Access-Control-Allow-Origin': '*' },
-
     });
-    }
+  }
 
   updateClient(c: Client): Observable<Client> {
     return this.http.put<Client>(this.host + '/clients/' + c.id, c);

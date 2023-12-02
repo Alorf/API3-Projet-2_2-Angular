@@ -1,1 +1,132 @@
-<p>locations works!</p>
+<div class="drawer drawer-end">
+  <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+
+  <div class="drawer-content">
+    <div class="container">
+      <div class="flex justify-between py-2" *ngIf="client == undefined">
+        <form class="join" #f="ngForm" (ngSubmit)="onSearch()">
+          <input
+            type="text"
+            ngModel
+            name="nom"
+            placeholder="Type here"
+            class="input input-bordered input-primary w-full max-w-xs join-item"
+          />
+          <button class="btn btn-primary join-item">Rechercher</button>
+        </form>
+        <div class="flex flex-row">
+          <div class="join">
+            <button class="join-item btn btn-primary" (click)="onNewLocation()">Ajouter</button>
+            <button class="join-item btn" [disabled]="isButtonPreviousDisabled" (click)="pagePrevious()">«</button>
+            <button class="join-item btn" (click)="reloadCurrentPage(page)">Page {{ page + 1 }}</button>
+            <button class="join-item btn" [disabled]="isButtonNextDisabled" (click)="pageNext()">»</button>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-between py-2" *ngIf="client">
+        <div class="collapse bg-base-200">
+          <input type="checkbox" (click)="hideTable()" />
+          <div class="collapse-title text-xl font-medium">Ajouter</div>
+          <div class="collapse-content">
+            <app-newlocation [client]="client" (newLocation)="onAddLocation($event)"></app-newlocation>
+          </div>
+        </div>
+      </div>
+
+      <ng-container *ngIf="locations && isAdding == false">
+        <ng-container *ngIf="locations.length > 0; else inconnu">
+          <div class="overflow-x-auto">
+            <table class="table">
+              <!-- head -->
+              <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>Date</th>
+                  <th>Km total</th>
+                  <th>Client</th>
+                  <th>Adresse</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- row 1 -->
+                <tr *ngFor="let l of locations">
+                  <th>{{ l.id }}</th>
+                  <td>{{ l.dateloc }}</td>
+                  <td>{{ l.kmTotal }}</td>
+                  <td>{{ l.client.id }}</td>
+                  <td>{{ l.adrDepart.id }}</td>
+                  <td class="join">
+                    <button class="join-item btn btn-success" (click)="editLocation(l)">Modifier</button>
+                    <!--<button class="join-item btn btn-primary" (click)="openFilterDrawer(l)">Voir</button>-->
+                    <button class="join-item btn btn-error" (click)="openDeleteModal(l)">Supprimer</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </ng-container>
+        <ng-template #inconnu>
+          <table class="table">
+            <!-- head -->
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Date</th>
+                <th>Km total</th>
+                <th>Client</th>
+                <th>Adresse</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="w-full">
+                <td colspan="5" classs="text-center">Aucunne location</td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-template>
+      </ng-container>
+    </div>
+
+    <dialog #deleteModal class="modal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg">Voulez-vous vraiment supprimer ?</h3>
+        <p class="py-4">Cela supprimera définitivement cette location</p>
+        <div class="modal-action">
+          <form method="dialog" class="join">
+            <button class="btn btn-error join-item" (click)="onDelete()">Oui</button>
+            <button class="btn join-item">Non</button>
+          </form>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog #addModal class="modal">
+      <div class="modal-box w-11/12 max-w-5xl">
+        <h3 class="font-bold text-lg">Ajout d'une location !</h3>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
+
+    <app-alert #alertComponent></app-alert>
+  </div>
+  <div class="drawer-side" *ngIf="client == null">
+    <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+    <div class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
+      <app-newlocation *ngIf="drawerMode === DrawerMode.add"></app-newlocation>
+
+      <!--
+        <app-newlocation *ngIf="drawerMode === DrawerMode.add"></app-newlocation>
+        <app-editlocation *ngIf="drawerMode === DrawerMode.edit" [location]="locationSelected"></app-editlocation>-->
+      <ng-container *ngIf="drawerMode === DrawerMode.filter">
+        <h1>Filtres</h1>
+
+        Tous les taxis utilisés sans doublon Toutes les locations entre deux dates Toutes les adresses où il s'est rendu
+        sans doublon
+      </ng-container>
+    </div>
+  </div>
+</div>

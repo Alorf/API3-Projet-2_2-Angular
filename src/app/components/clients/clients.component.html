@@ -15,11 +15,10 @@
           <button class="btn btn-primary join-item">Rechercher</button>
         </form>
         <div class="flex flex-row">
-          <button class="btn btn-primary" (click)="onNewClient()">Ajouter</button>
-
           <div class="join">
+            <button class="join-item btn btn-primary" (click)="onNewClient()">Ajouter</button>
             <button class="join-item btn" [disabled]="isButtonPreviousDisabled" (click)="pagePrevious()">«</button>
-            <button class="join-item btn">Page {{ page + 1 }}</button>
+            <button class="join-item btn" (click)="reloadCurrentPage(page)">Page {{ page + 1 }}</button>
             <button class="join-item btn" [disabled]="isButtonNextDisabled" (click)="pageNext()">»</button>
           </div>
         </div>
@@ -50,6 +49,7 @@
                   <td>{{ c.tel }}</td>
                   <td class="join">
                     <button class="join-item btn btn-success" (click)="editClient(c)">Modifier</button>
+                    <button class="join-item btn btn-primary" (click)="openFilterDrawer(c)">Voir</button>
                     <button class="join-item btn btn-error" (click)="openDeleteModal(c)">Supprimer</button>
                   </td>
                 </tr>
@@ -85,23 +85,46 @@
         <h3 class="font-bold text-lg">Voulez-vous vraiment supprimer {{ nom }}?</h3>
         <p class="py-4">Cela supprimera définitivement ce client</p>
         <div class="modal-action">
-          <form method="dialog">
-            <button class="btn btn-error" (click)="onDelete()">Oui</button>
-            <button class="btn">Non</button>
+          <form method="dialog" class="join">
+            <button class="btn btn-error join-item" (click)="onDelete()">Oui</button>
+            <button class="btn join-item">Non</button>
           </form>
         </div>
       </div>
     </dialog>
 
-    <app-alert #alertComponent></app-alert>
+    <dialog #locationModal class="modal">
+      <div class="modal-box w-11/12 max-w-5xl">
+        <h3 class="font-bold text-lg">Voici les locations de {{ clientSelected?.prenom }} {{ clientSelected?.nom }}</h3>
+        <app-locations *ngIf="drawerMode === DrawerMode.filter" [client]="clientSelected"></app-locations>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
 
-    <!-- Page content here -->
+    <app-alert #alertComponent></app-alert>
   </div>
   <div class="drawer-side">
     <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
-    <div class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
-      <app-newclient *ngIf="!isEditing"></app-newclient>
-      <app-editclient *ngIf="isEditing" [client]="clientSelected"></app-editclient>
+    <div class="menu p-4 min-h-screen w-80 bg-base-200 text-base-content">
+      <app-newclient *ngIf="drawerMode === DrawerMode.add"></app-newclient>
+      <app-editclient *ngIf="drawerMode === DrawerMode.edit" [client]="clientSelected"></app-editclient>
+      <ng-container *ngIf="drawerMode === DrawerMode.filter">
+        <h1>Filtres</h1>
+        <div class="gap-4 flex flex-col">
+          <button class="btn btn-primary" (click)="openLocation()">Locations</button>
+          <button class="btn btn-primary">Locations</button>
+
+          <button class="btn btn-primary">Locations</button>
+        </div>
+
+        <!--
+          Tous les taxis utilisés sans doublon
+          Toutes les locations entre deux dates
+          Toutes les adresses où il s'est rendu sans doublon
+          -->
+      </ng-container>
     </div>
   </div>
 </div>
