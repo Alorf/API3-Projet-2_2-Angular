@@ -1,18 +1,17 @@
-import { Component, ElementRef, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
-import { Client } from '../../entities/clients.entities';
-import { ClientsService } from '../../services/clients.service';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { DrawerMode } from '../tools/Enum/drawer-mode';
+import { AdressesService } from '../../services/adresses.service';
 import { Router } from '@angular/router';
-import { last, timeout } from 'rxjs';
 import { AlertComponent } from '../tools/alert/alert.component';
 import { AlertType } from '../tools/alert/enums/alert-type.enum';
-import { DrawerMode } from '../tools/Enum/drawer-mode';
+import { Adresse } from '../../entities/adresse.entities';
 
 @Component({
-  selector: 'app-clients',
-  templateUrl: './clients.component.html',
-  styleUrl: './clients.component.css',
+  selector: 'app-adresses',
+  templateUrl: './adresses.component.html',
+  styleUrl: './adresses.component.css',
 })
-export class ClientsComponent implements OnInit {
+export class AdressesComponent implements OnInit {
   DrawerMode = DrawerMode;
 
   @ViewChild('deleteModal') deleteModal!: ElementRef;
@@ -22,20 +21,20 @@ export class ClientsComponent implements OnInit {
 
   drawerMode: DrawerMode = DrawerMode.add;
 
-  clients?: Client[];
-  clientSelected?: Client;
+  adresses?: Adresse[];
+  adresseSelected?: Adresse;
 
   isSelected: boolean = false;
 
-  constructor(private clientsService: ClientsService, private router: Router) {}
+  constructor(private adressesService: AdressesService, private router: Router) {}
 
   page: number = 0;
   isButtonPreviousDisabled = false; // change this value to true to disable the button
   isButtonNextDisabled = false; // change this value to true to disable the button
 
   ngOnInit(): void {
-    this.clientsService.getPaginatorClients(0, 5, 'nom').subscribe((data: any) => {
-      this.clients = data.content;
+    this.adressesService.getPaginatorAdresses(0, 5, 'cp').subscribe((data: any) => {
+      this.adresses = data.content;
       this.page = data.number;
 
       if (data.last) this.isButtonNextDisabled = true;
@@ -44,8 +43,8 @@ export class ClientsComponent implements OnInit {
   }
 
   pageNext() {
-    this.clientsService.getPaginatorClients(++this.page, 5, 'nom').subscribe((data: any) => {
-      this.clients = data.content;
+    this.adressesService.getPaginatorAdresses(++this.page, 5, 'cp').subscribe((data: any) => {
+      this.adresses = data.content;
       this.isButtonPreviousDisabled = false;
 
       if (data.last) {
@@ -56,8 +55,8 @@ export class ClientsComponent implements OnInit {
   }
 
   reloadCurrentPage(page: number) {
-    this.clientsService.getPaginatorClients(page, 5, 'nom').subscribe((data: any) => {
-      this.clients = data.content;
+    this.adressesService.getPaginatorAdresses(page, 5, 'cp').subscribe((data: any) => {
+      this.adresses = data.content;
       this.page = data.number;
 
       if (data.last) this.isButtonNextDisabled = true;
@@ -66,8 +65,8 @@ export class ClientsComponent implements OnInit {
   }
 
   pagePrevious() {
-    this.clientsService.getPaginatorClients(--this.page, 5, 'nom').subscribe((data: any) => {
-      this.clients = data.content;
+    this.adressesService.getPaginatorAdresses(--this.page, 5, 'cp').subscribe((data: any) => {
+      this.adresses = data.content;
       this.isButtonNextDisabled = false;
 
       if (data.first) {
@@ -78,18 +77,18 @@ export class ClientsComponent implements OnInit {
   }
 
   onSearch(value: any) {
-    if (value.nom === '') {
+    if (value.localite === '') {
       this.alertComponent?.show(AlertType.error, 'Veuillez saisir un nom');
     } else {
       this.alertComponent?.hide();
-      this.clientsService.searchClients(value.nom).subscribe((data: any) => {
-        this.clients = data;
+      this.adressesService.searchAdresses(value.localite).subscribe((data: any) => {
+        this.adresses = data;
       });
     }
   }
 
-  onNewClient() {
-    //this.router.navigateByUrl('/newClient');
+  onNewAdresse() {
+    //this.router.navigateByUrl('/newAdresse');
     this.drawerMode = DrawerMode.add;
     // Open the drawer
     const drawerElement = document.getElementById('my-drawer') as HTMLInputElement;
@@ -104,10 +103,10 @@ export class ClientsComponent implements OnInit {
     }
   }
 
-  openFilterDrawer(client: Client) {
+  openFilterDrawer(adresse: Adresse) {
     this.drawerMode = DrawerMode.filter;
-    this.clientSelected = client;
-    console.log('clientSelected = ', this.clientSelected);
+    this.adresseSelected = adresse;
+    console.log('adresseSelected = ', this.adresseSelected);
 
     const drawerElement = document.getElementById('my-drawer') as HTMLInputElement;
     if (drawerElement) {
@@ -116,27 +115,27 @@ export class ClientsComponent implements OnInit {
   }
 
   voir() {
-    alert(this.clientSelected);
+    alert(this.adresseSelected);
   }
 
-  openDeleteModal(c: Client) {
-    //let v = confirm('Etes vous sur de vouloir supprimer ce client ?');
+  openDeleteModal(t: Adresse) {
+    //let v = confirm('Etes vous sur de vouloir supprimer ce adresse ?');
+    this.adresseSelected = t;
     this.showModal();
-    this.clientSelected = c;
   }
 
   onDelete() {
-    if (this.clientSelected === undefined) return;
+    if (this.adresseSelected === undefined) return;
 
-    this.clientsService.deleteClient(this.clientSelected).subscribe({
+    this.adressesService.deleteAdresse(this.adresseSelected).subscribe({
       next: data => {
-        if (this.clientSelected === undefined) return;
-        const index = this.clients?.indexOf(this.clientSelected, 0);
+        if (this.adresseSelected === undefined) return;
+        const index = this.adresses?.indexOf(this.adresseSelected, 0);
 
         //alert('index = ' + index);
-        this.alertComponent?.show(AlertType.ok, 'Client ' + this.clientSelected.nom + ' supprimé');
+        this.alertComponent?.show(AlertType.ok, 'Adresse ' + this.adresseSelected.cp + ' supprimé');
         if (!(index === undefined) && index > -1) {
-          this.clients?.splice(index, 1);
+          this.adresses?.splice(index, 1);
         }
       },
       error: err => {
@@ -148,9 +147,9 @@ export class ClientsComponent implements OnInit {
     }, 5000);
   }
 
-  editClient(c: Client) {
+  editAdresse(c: Adresse) {
     this.drawerMode = DrawerMode.edit;
-    this.clientSelected = c;
+    this.adresseSelected = c;
 
     const drawerElement = document.getElementById('my-drawer') as HTMLInputElement;
     if (drawerElement) {
@@ -158,19 +157,7 @@ export class ClientsComponent implements OnInit {
     }
   }
 
-  onEdit(c: Client) {
-    this.router.navigateByUrl('/editClient/' + c.id);
-  }
-
-  openLocation() {
-    const drawerElement = document.getElementById('my-drawer') as HTMLInputElement;
-    if (drawerElement) {
-      drawerElement.checked = false;
-    }
-    //Set input of app-locations
-
-    if (this.locationModal) {
-      this.locationModal.nativeElement.showModal();
-    }
+  onEdit(c: Adresse) {
+    this.router.navigateByUrl('/editAdresse/' + c.id);
   }
 }

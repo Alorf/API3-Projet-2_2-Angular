@@ -14,6 +14,10 @@ export class TaxisService {
     return this.http.get<Taxi>(this.host + '/taxis/' + idtaxi);
   }
 
+  searchTaxis(immatriculation: string): Observable<Taxi> {
+    return this.http.get<Taxi>(this.host + '/taxis/immatriculation=' + immatriculation);
+  }
+
   getAllTaxis(): Observable<Taxi[]> {
     return this.http.get<Taxi[]>(this.host + '/taxis/all');
   }

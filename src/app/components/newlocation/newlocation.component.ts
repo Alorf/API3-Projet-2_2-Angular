@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { LocationsService } from '../../services/locations.service';
 import { Router } from '@angular/router';
@@ -18,7 +18,7 @@ import { formatDate } from '@angular/common';
   templateUrl: './newlocation.component.html',
   styleUrl: './newlocation.component.css',
 })
-export class NewlocationComponent implements OnInit {
+export class NewlocationComponent implements OnInit, OnChanges {
   locationFormGroup?: FormGroup;
   clients?: Client[];
   adresses?: Adresse[];
@@ -40,6 +40,17 @@ export class NewlocationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadForm();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.client && changes.client.currentValue && this.client !== undefined) {
+      this.client = changes.client.currentValue;
+      this.loadForm();
+    }
+  }
+
+  loadForm(): void {
     if (this.client === undefined) {
       this.clientsService.getAllClients().subscribe((clients: Client[]) => {
         this.clients = clients;
@@ -57,8 +68,8 @@ export class NewlocationComponent implements OnInit {
     this.locationFormGroup = this.fb.group({
       idclient: new FormControl(
         {
-          value: this.client?.id === undefined ? '1' : this.client.id,
-          disabled: this.client?.id != undefined, // Set disabled to true if needed
+          value: this.client?.id === undefined ? '1' : this.client.id, //On met le premier client par défaut
+          disabled: this.client?.id != undefined, //Si on recoit un client, on ne peut pas le changer
         },
         [Validators.required],
       ),

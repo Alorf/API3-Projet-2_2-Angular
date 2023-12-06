@@ -8,7 +8,7 @@
           <input
             type="text"
             ngModel
-            name="nom"
+            name="immatriculation"
             placeholder="Type here"
             class="input input-bordered input-primary w-full max-w-xs join-item"
           />
@@ -16,7 +16,7 @@
         </form>
         <div class="flex flex-row">
           <div class="join">
-            <button class="join-item btn btn-primary" (click)="onNewClient()">Ajouter</button>
+            <button class="join-item btn btn-primary" (click)="onNewTaxi()">Ajouter</button>
             <button class="join-item btn" [disabled]="isButtonPreviousDisabled" (click)="pagePrevious()">«</button>
             <button class="join-item btn" (click)="reloadCurrentPage(page)">Page {{ page + 1 }}</button>
             <button class="join-item btn" [disabled]="isButtonNextDisabled" (click)="pageNext()">»</button>
@@ -24,33 +24,31 @@
         </div>
       </div>
 
-      <ng-container *ngIf="clients">
-        <ng-container *ngIf="clients.length > 0; else inconnu">
+      <ng-container *ngIf="taxis">
+        <ng-container *ngIf="taxis.length > 0; else inconnu">
           <div class="overflow-x-auto">
             <table class="table">
               <!-- head -->
               <thead>
                 <tr>
                   <th>Id</th>
-                  <th>Nom</th>
-                  <th>Prénom</th>
-                  <th>Mail</th>
-                  <th>Téléphone</th>
+                  <th>Immatriculation</th>
+                  <th>Carburant</th>
+                  <th>PrixKM</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 <!-- row 1 -->
-                <tr *ngFor="let c of clients">
-                  <th>{{ c.id }}</th>
-                  <td>{{ c.nom }}</td>
-                  <td>{{ c.prenom }}</td>
-                  <td>{{ c.mail }}</td>
-                  <td>{{ c.tel }}</td>
+                <tr *ngFor="let t of taxis">
+                  <th>{{ t.id }}</th>
+                  <td>{{ t.immatriculation }}</td>
+                  <td>{{ t.carburant }}</td>
+                  <td>{{ t.prixKm | currency : 'EUR' }}</td>
                   <td class="join">
-                    <button class="join-item btn btn-success" (click)="editClient(c)">Modifier</button>
-                    <button class="join-item btn btn-primary" (click)="openFilterDrawer(c)">Voir</button>
-                    <button class="join-item btn btn-error" (click)="openDeleteModal(c)">Supprimer</button>
+                    <button class="join-item btn btn-success" (click)="editTaxi(t)">Modifier</button>
+                    <button class="join-item btn btn-primary" (click)="openFilterDrawer(t)">Voir</button>
+                    <button class="join-item btn btn-error" (click)="openDeleteModal(t)">Supprimer</button>
                   </td>
                 </tr>
               </tbody>
@@ -63,16 +61,16 @@
             <thead>
               <tr>
                 <th>Id</th>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Mail</th>
-                <th>Téléphone</th>
+                <th>Immatriculation</th>
+                <th>Carburant</th>
+                <th>PrixKM</th>
+                <th>Actions</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               <tr class="w-full">
-                <td colspan="5" classs="text-center">Aucun client</td>
+                <td colspan="4" classs="text-center">Aucun taxi</td>
               </tr>
             </tbody>
           </table>
@@ -82,8 +80,8 @@
 
     <dialog #deleteModal class="modal">
       <div class="modal-box">
-        <h3 class="font-bold text-lg">Voulez-vous vraiment supprimer {{ clientSelected?.nom }}?</h3>
-        <p class="py-4">Cela supprimera définitivement ce client</p>
+        <h3 class="font-bold text-lg">Voulez-vous vraiment supprimer {{ taxiSelected?.immatriculation }}?</h3>
+        <p class="py-4">Cela supprimera définitivement ce taxi</p>
         <div class="modal-action">
           <form method="dialog" class="join">
             <button class="btn btn-error join-item" (click)="onDelete()">Oui</button>
@@ -93,37 +91,20 @@
       </div>
     </dialog>
 
-    <dialog #locationModal class="modal">
-      <div class="modal-box w-11/12 max-w-5xl">
-        <h3 class="font-bold text-lg">Voici les locations de {{ clientSelected?.prenom }} {{ clientSelected?.nom }}</h3>
-        <app-locations *ngIf="drawerMode === DrawerMode.filter" [client]="clientSelected"></app-locations>
-      </div>
-      <form method="dialog" class="modal-backdrop">
-        <button>close</button>
-      </form>
-    </dialog>
-
     <app-alert #alertComponent></app-alert>
   </div>
   <div class="drawer-side">
     <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
     <div class="menu p-4 min-h-screen w-80 bg-base-200 text-base-content">
-      <app-newclient *ngIf="drawerMode === DrawerMode.add"></app-newclient>
-      <app-editclient *ngIf="drawerMode === DrawerMode.edit" [client]="clientSelected"></app-editclient>
+      <app-newtaxis *ngIf="drawerMode === DrawerMode.add"></app-newtaxis>
+      <app-edittaxis *ngIf="drawerMode === DrawerMode.edit" [taxi]="taxiSelected"></app-edittaxis>
       <ng-container *ngIf="drawerMode === DrawerMode.filter">
         <h1>Filtres</h1>
         <div class="gap-4 flex flex-col">
-          <button class="btn btn-primary" (click)="openLocation()">Locations</button>
           <button class="btn btn-primary">Locations</button>
 
           <button class="btn btn-primary">Locations</button>
         </div>
-
-        <!--
-          Tous les taxis utilisés sans doublon
-          Toutes les locations entre deux dates
-          Toutes les adresses où il s'est rendu sans doublon
-          -->
       </ng-container>
     </div>
   </div>

@@ -11,7 +11,7 @@ import { Client } from '../../entities/clients.entities';
   templateUrl: './editclient.component.html',
   styleUrl: './editclient.component.css',
 })
-export class EditclientComponent implements OnInit, OnChanges{
+export class EditclientComponent implements OnInit, OnChanges {
   @ViewChild('alertComponent') alertComponent: AlertComponent | undefined;
   @Input({ required: true }) client: Client | undefined;
 
@@ -24,21 +24,16 @@ export class EditclientComponent implements OnInit, OnChanges{
   }
 
   ngOnInit(): void {
-    this.loadForm(this.client!);
-    /*
-    this.clientService.getClient(this.idClient).subscribe(client => {
-      this.clientFormGroup = this.fb.group({
-        id: [client.id],
-        nom: [client.nom, [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
-        prenom: [client.prenom, [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
-        mail: [client.mail, [Validators.required, Validators.email]],
-        tel: [client.tel, [Validators.required]],
+    if (this.client === undefined) {
+      this.clientService.getClient(this.idClient).subscribe(client => {
+        this.loadForm(client);
       });
-    });
-    */
+    } else {
+      this.loadForm(this.client!);
+    }
   }
 
-  loadForm(client : Client){
+  loadForm(client: Client) {
     this.clientFormGroup = this.fb.group({
       id: [client.id],
       nom: [client.nom, [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
@@ -48,7 +43,8 @@ export class EditclientComponent implements OnInit, OnChanges{
     });
   }
 
-  ngOnChanges(changes: SimpleChanges) {        
+  ngOnChanges(changes: SimpleChanges) {
+    //Quand l'input change de valeur, on met a jour le formulaire. Cela ne détruit pas le composant, mais le met a jour.
     if (changes.client && changes.client.currentValue && this.client !== undefined) {
       this.client = changes.client.currentValue;
       this.loadForm(changes.client.currentValue);

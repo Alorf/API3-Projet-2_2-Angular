@@ -14,6 +14,12 @@ import { AlertComponent } from './components/tools/alert/alert.component';
 import { EditclientComponent } from './components/editclient/editclient.component';
 import { EditlocationComponent } from './components/editlocation/editlocation.component';
 import { NewlocationComponent } from './components/newlocation/newlocation.component';
+import { TaxisComponent } from './components/taxis/taxis.component';
+import { NewtaxisComponent } from './components/newtaxis/newtaxis.component';
+import { EdittaxisComponent } from './components/edittaxis/edittaxis.component';
+import { AdressesComponent } from './components/adresses/adresses.component';
+import { EditadressesComponent } from './components/editadresses/editadresses.component';
+import { NewadressesComponent } from './components/newadresses/newadresses.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +32,13 @@ import { NewlocationComponent } from './components/newlocation/newlocation.compo
     AlertComponent,
     EditclientComponent,
     EditlocationComponent,
-    NewlocationComponent
+    NewlocationComponent,
+    TaxisComponent,
+    NewtaxisComponent,
+    EdittaxisComponent,
+    AdressesComponent,
+    EditadressesComponent,
+    NewadressesComponent
   ],
   imports: [
     BrowserModule,

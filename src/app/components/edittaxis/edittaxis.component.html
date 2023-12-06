@@ -1,0 +1,57 @@
+<form class="form-control gap-4 w-full max-w-xs" [formGroup]="taxiFormGroup" *ngIf="taxiFormGroup">
+  <div>
+    <label class="label">
+      <span class="label-text">Immatriculation</span>
+    </label>
+    <input
+      type="text"
+      placeholder="T-ABC-123"
+      class="input input-bordered w-full max-w-xs"
+      formControlName="immatriculation"
+      [ngClass]="{
+        'input-error': submitted && taxiFormGroup.controls.immatriculation.errors
+      }"
+    />
+    <label *ngIf="submitted && taxiFormGroup.controls.immatriculation.errors">
+      <span *ngIf="taxiFormGroup.controls.immatriculation.errors.required"> immatriculation obligatoire </span>
+    </label>
+  </div>
+
+  <div>
+    <label class="label">
+      <span class="label-text">Carburant</span>
+    </label>
+    <input
+      type="text"
+      placeholder="Carburant"
+      class="input input-bordered w-full max-w-xs"
+      formControlName="carburant"
+      [ngClass]="{
+        'input-error': submitted && taxiFormGroup.controls.carburant.errors
+      }"
+    />
+    <label *ngIf="submitted && taxiFormGroup.controls.carburant.errors">
+      <span *ngIf="taxiFormGroup.controls.carburant.errors.required"> carburant obligatoire </span>
+    </label>
+  </div>
+  <div>
+    <label class="label">
+      <span class="label-text">Prix au kilomètre</span>
+    </label>
+    <input
+      type="number"
+      placeholder="prixKm"
+      class="input input-bordered w-full max-w-xs"
+      formControlName="prixKm"
+      [ngClass]="{
+        'input-error': submitted && taxiFormGroup.controls.prixKm.errors
+      }"
+    />
+    <label *ngIf="submitted && taxiFormGroup.controls.prixKm.errors">
+      <span *ngIf="taxiFormGroup.controls.prixKm.errors.required"> prixKm obligatoire </span>
+    </label>
+  </div>
+
+  <button (click)="onUpdateTaxi()" class="btn btn-primary">Modifier</button>
+</form>
+<app-alert #alertComponent></app-alert>

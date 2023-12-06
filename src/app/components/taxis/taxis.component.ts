@@ -1,18 +1,17 @@
-import { Component, ElementRef, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
-import { Client } from '../../entities/clients.entities';
-import { ClientsService } from '../../services/clients.service';
-import { Router } from '@angular/router';
-import { last, timeout } from 'rxjs';
-import { AlertComponent } from '../tools/alert/alert.component';
-import { AlertType } from '../tools/alert/enums/alert-type.enum';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DrawerMode } from '../tools/Enum/drawer-mode';
+import { TaxisService } from '../../services/taxis.service';
+import { Router } from '@angular/router';
+import { AlertComponent } from '../tools/alert/alert.component';
+import { Taxi } from '../../entities/taxi.entities';
+import { AlertType } from '../tools/alert/enums/alert-type.enum';
 
 @Component({
-  selector: 'app-clients',
-  templateUrl: './clients.component.html',
-  styleUrl: './clients.component.css',
+  selector: 'app-taxis',
+  templateUrl: './taxis.component.html',
+  styleUrl: './taxis.component.css',
 })
-export class ClientsComponent implements OnInit {
+export class TaxisComponent implements OnInit {
   DrawerMode = DrawerMode;
 
   @ViewChild('deleteModal') deleteModal!: ElementRef;
@@ -22,20 +21,20 @@ export class ClientsComponent implements OnInit {
 
   drawerMode: DrawerMode = DrawerMode.add;
 
-  clients?: Client[];
-  clientSelected?: Client;
+  taxis?: Taxi[];
+  taxiSelected?: Taxi;
 
   isSelected: boolean = false;
 
-  constructor(private clientsService: ClientsService, private router: Router) {}
+  constructor(private taxisService: TaxisService, private router: Router) {}
 
   page: number = 0;
   isButtonPreviousDisabled = false; // change this value to true to disable the button
   isButtonNextDisabled = false; // change this value to true to disable the button
 
   ngOnInit(): void {
-    this.clientsService.getPaginatorClients(0, 5, 'nom').subscribe((data: any) => {
-      this.clients = data.content;
+    this.taxisService.getPaginatorTaxis(0, 5, 'immatriculation').subscribe((data: any) => {
+      this.taxis = data.content;
       this.page = data.number;
 
       if (data.last) this.isButtonNextDisabled = true;
@@ -44,8 +43,8 @@ export class ClientsComponent implements OnInit {
   }
 
   pageNext() {
-    this.clientsService.getPaginatorClients(++this.page, 5, 'nom').subscribe((data: any) => {
-      this.clients = data.content;
+    this.taxisService.getPaginatorTaxis(++this.page, 5, 'immatriculation').subscribe((data: any) => {
+      this.taxis = data.content;
       this.isButtonPreviousDisabled = false;
 
       if (data.last) {
@@ -56,8 +55,8 @@ export class ClientsComponent implements OnInit {
   }
 
   reloadCurrentPage(page: number) {
-    this.clientsService.getPaginatorClients(page, 5, 'nom').subscribe((data: any) => {
-      this.clients = data.content;
+    this.taxisService.getPaginatorTaxis(page, 5, 'immatriculation').subscribe((data: any) => {
+      this.taxis = data.content;
       this.page = data.number;
 
       if (data.last) this.isButtonNextDisabled = true;
@@ -66,8 +65,8 @@ export class ClientsComponent implements OnInit {
   }
 
   pagePrevious() {
-    this.clientsService.getPaginatorClients(--this.page, 5, 'nom').subscribe((data: any) => {
-      this.clients = data.content;
+    this.taxisService.getPaginatorTaxis(--this.page, 5, 'immatriculation').subscribe((data: any) => {
+      this.taxis = data.content;
       this.isButtonNextDisabled = false;
 
       if (data.first) {
@@ -78,18 +77,23 @@ export class ClientsComponent implements OnInit {
   }
 
   onSearch(value: any) {
-    if (value.nom === '') {
-      this.alertComponent?.show(AlertType.error, 'Veuillez saisir un nom');
+    //todo : refaire la recherche
+    console.log('value = ', value);
+    if (value.immatriculation === '') {
+      this.alertComponent?.show(AlertType.error, 'Veuillez saisir une immatriculation');
     } else {
+      console.log('taxis = ', this.taxis);
       this.alertComponent?.hide();
-      this.clientsService.searchClients(value.nom).subscribe((data: any) => {
-        this.clients = data;
+      this.taxisService.searchTaxis(value.immatriculation).subscribe((data: any) => {
+        this.taxis = [];
+        this.taxis?.push(data);
+        console.log('taxis = ', this.taxis);
       });
     }
   }
 
-  onNewClient() {
-    //this.router.navigateByUrl('/newClient');
+  onNewTaxi() {
+    //this.router.navigateByUrl('/newTaxi');
     this.drawerMode = DrawerMode.add;
     // Open the drawer
     const drawerElement = document.getElementById('my-drawer') as HTMLInputElement;
@@ -104,10 +108,10 @@ export class ClientsComponent implements OnInit {
     }
   }
 
-  openFilterDrawer(client: Client) {
+  openFilterDrawer(taxi: Taxi) {
     this.drawerMode = DrawerMode.filter;
-    this.clientSelected = client;
-    console.log('clientSelected = ', this.clientSelected);
+    this.taxiSelected = taxi;
+    console.log('taxiSelected = ', this.taxiSelected);
 
     const drawerElement = document.getElementById('my-drawer') as HTMLInputElement;
     if (drawerElement) {
@@ -116,27 +120,27 @@ export class ClientsComponent implements OnInit {
   }
 
   voir() {
-    alert(this.clientSelected);
+    alert(this.taxiSelected);
   }
 
-  openDeleteModal(c: Client) {
-    //let v = confirm('Etes vous sur de vouloir supprimer ce client ?');
+  openDeleteModal(t: Taxi) {
+    //let v = confirm('Etes vous sur de vouloir supprimer ce taxi ?');
+    this.taxiSelected = t;
     this.showModal();
-    this.clientSelected = c;
   }
 
   onDelete() {
-    if (this.clientSelected === undefined) return;
+    if (this.taxiSelected === undefined) return;
 
-    this.clientsService.deleteClient(this.clientSelected).subscribe({
+    this.taxisService.deleteTaxi(this.taxiSelected).subscribe({
       next: data => {
-        if (this.clientSelected === undefined) return;
-        const index = this.clients?.indexOf(this.clientSelected, 0);
+        if (this.taxiSelected === undefined) return;
+        const index = this.taxis?.indexOf(this.taxiSelected, 0);
 
         //alert('index = ' + index);
-        this.alertComponent?.show(AlertType.ok, 'Client ' + this.clientSelected.nom + ' supprimé');
+        this.alertComponent?.show(AlertType.ok, 'Taxi ' + this.taxiSelected.immatriculation + ' supprimé');
         if (!(index === undefined) && index > -1) {
-          this.clients?.splice(index, 1);
+          this.taxis?.splice(index, 1);
         }
       },
       error: err => {
@@ -148,9 +152,9 @@ export class ClientsComponent implements OnInit {
     }, 5000);
   }
 
-  editClient(c: Client) {
+  editTaxi(c: Taxi) {
     this.drawerMode = DrawerMode.edit;
-    this.clientSelected = c;
+    this.taxiSelected = c;
 
     const drawerElement = document.getElementById('my-drawer') as HTMLInputElement;
     if (drawerElement) {
@@ -158,19 +162,7 @@ export class ClientsComponent implements OnInit {
     }
   }
 
-  onEdit(c: Client) {
-    this.router.navigateByUrl('/editClient/' + c.id);
-  }
-
-  openLocation() {
-    const drawerElement = document.getElementById('my-drawer') as HTMLInputElement;
-    if (drawerElement) {
-      drawerElement.checked = false;
-    }
-    //Set input of app-locations
-
-    if (this.locationModal) {
-      this.locationModal.nativeElement.showModal();
-    }
+  onEdit(c: Taxi) {
+    this.router.navigateByUrl('/editTaxi/' + c.id);
   }
 }

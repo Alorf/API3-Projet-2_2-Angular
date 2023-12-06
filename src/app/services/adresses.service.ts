@@ -14,16 +14,12 @@ export class AdressesService {
     return this.http.get<Adresse>(this.host + '/adresses/' + idadresse);
   }
 
-  searchAdresseUnique(nom: string, prenom: string, tel: string): Observable<Adresse[]> {
-    return this.http.get<Adresse[]>(this.host + '/adresses/' + nom + '/' + prenom + '/' + tel);
-  }
-
   getAllAdresses(): Observable<Adresse[]> {
     return this.http.get<Adresse[]>(this.host + '/adresses/all');
   }
 
-  searchAdresses(nom: string): Observable<Adresse[]> {
-    return this.http.get<Adresse[]>(this.host + '/adresses/nom=' + nom);
+  searchAdresses(localite: string): Observable<Adresse[]> {
+    return this.http.get<Adresse[]>(this.host + '/adresses/localite=' + localite);
   }
 
   getPaginatorAdresses(page: number, size: number, sort: string) {

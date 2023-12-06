@@ -11,8 +11,8 @@
           'input-error': submitted && locationFormGroup.controls.idadresse.errors
         }"
       >
-        <option value="{{ client.id }}" *ngIf="client != undefined" selected>{{ client?.mail }}</option>
-        <option value="{{ client.id }}" *ngFor="let client of clients">{{ client?.mail }}</option>
+        <option value="{{ client.id }}" *ngIf="client != undefined" selected>{{ client.mail }}</option>
+        <option value="{{ client.id }}" *ngFor="let client of clients">{{ client.mail }}</option>
       </select>
       <div class="label" *ngIf="submitted && locationFormGroup.controls.idclient.errors">
         <span class="text-red-500"> Client obligatoire </span>
