@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { AlertType } from '../tools/alert/enums/alert-type.enum';
 import { Client } from '../../entities/clients.entities';
 import { Location } from '../../entities/location.entities';
+import { CollapseMode } from '../tools/Enum/collapse-mode';
 
 @Component({
   selector: 'app-locations',
@@ -14,14 +15,17 @@ import { Location } from '../../entities/location.entities';
 })
 export class LocationsComponent implements OnInit, OnChanges {
   DrawerMode = DrawerMode;
+  CollapseMode = CollapseMode;
 
   @Input({ required: true }) client: Client | undefined;
   @ViewChild('deleteModal') deleteModal!: ElementRef;
   @ViewChild('addModal') addModal!: ElementRef;
+  @ViewChild('collapseCheckbox') collapseCheckbox!: ElementRef;
 
   @ViewChild('alertComponent', { static: false }) alertComponent: AlertComponent | undefined;
 
   drawerMode: DrawerMode = DrawerMode.add;
+  collapseMode: CollapseMode = CollapseMode.add;
 
   isAdding: boolean = false;
 
@@ -46,7 +50,8 @@ export class LocationsComponent implements OnInit, OnChanges {
         if (data.first) this.isButtonPreviousDisabled = true;
       });
     } else {
-      //fixme : erreur ici de requete
+      console.log('clienttt = ', this.client);
+
       this.locationsService.searchLocations(this.client).subscribe((data: any) => {
         this.locations = data;
       });
@@ -118,6 +123,10 @@ export class LocationsComponent implements OnInit, OnChanges {
   }
 
   hideTable() {
+    if (this.collapseMode != CollapseMode.add && this.isAdding) {
+      this.collapseMode = CollapseMode.add;
+    }
+
     this.isAdding = !this.isAdding;
   }
 
@@ -152,8 +161,14 @@ export class LocationsComponent implements OnInit, OnChanges {
     }, 5000);
   }
 
+  editLocationCollapsed(location: Location) {
+    this.collapseMode = CollapseMode.edit;
+    this.locationSelected = location;
+    this.collapseCheckbox.nativeElement.checked = true;
+    this.hideTable();
+  }
+
   editLocation(location: Location) {
-    this.drawerMode = DrawerMode.edit;
     this.locationSelected = location;
 
     const drawerElement = document.getElementById('my-drawer') as HTMLInputElement;
@@ -166,7 +181,28 @@ export class LocationsComponent implements OnInit, OnChanges {
     this.locations?.push(location);
   }
 
+  onEditLocation(location: Location) {
+    if (location.client.id != this.locationSelected?.client.id) {
+      const index = this.locations?.indexOf(this.locationSelected!, 0);
+      console.log('index = ', index);
+
+      if (!(index === undefined) && index > -1) {
+        this.locations?.splice(index, 1);
+      }
+    }
+  }
+
   onEdit(location: Location) {
     //this.router.navigateByUrl('/editClient/' + location.id);
+  }
+
+  openFilterDrawer(location: Location) {
+    this.drawerMode = DrawerMode.filter;
+    this.locationSelected = location;
+
+    const drawerElement = document.getElementById('my-drawer') as HTMLInputElement;
+    if (drawerElement) {
+      drawerElement.checked = true;
+    }
   }
 }

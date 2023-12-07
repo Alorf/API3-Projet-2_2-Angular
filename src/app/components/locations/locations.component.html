@@ -26,10 +26,20 @@
 
       <div class="flex justify-between py-2" *ngIf="client">
         <div class="collapse bg-base-200">
-          <input type="checkbox" (click)="hideTable()" />
-          <div class="collapse-title text-xl font-medium">Ajouter</div>
+          <input #collapseCheckbox type="checkbox" (click)="hideTable()" />
+          <div class="collapse-title text-xl font-medium">{{ collapseMode }}</div>
           <div class="collapse-content">
-            <app-newlocation [client]="client" (newLocation)="onAddLocation($event)"></app-newlocation>
+            <app-editlocation
+              *ngIf="collapseMode == CollapseMode.edit"
+              [location]="locationSelected"
+              (editLocation)="onEditLocation($event)"
+            ></app-editlocation>
+
+            <app-newlocation
+              *ngIf="collapseMode == CollapseMode.add"
+              [client]="client"
+              (newLocation)="onAddLocation($event)"
+            ></app-newlocation>
           </div>
         </div>
       </div>
@@ -58,8 +68,21 @@
                   <td>{{ l.client.id }}</td>
                   <td>{{ l.adrDepart.id }}</td>
                   <td class="join">
-                    <button class="join-item btn btn-success" (click)="editLocation(l)">Modifier</button>
-                    <!--<button class="join-item btn btn-primary" (click)="openFilterDrawer(l)">Voir</button>-->
+                    <button
+                      *ngIf="client != undefined"
+                      class="join-item btn btn-success"
+                      (click)="editLocationCollapsed(l)"
+                    >
+                      Modifier
+                    </button>
+
+                    <button *ngIf="client == undefined" class="join-item btn btn-success" (click)="editLocation(l)">
+                      Modifier
+                    </button>
+
+                    <button *ngIf="client == undefined" class="join-item btn btn-primary" (click)="openFilterDrawer(l)">
+                      Voir
+                    </button>
                     <button class="join-item btn btn-error" (click)="openDeleteModal(l)">Supprimer</button>
                   </td>
                 </tr>
@@ -119,14 +142,20 @@
     <div class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
       <app-newlocation *ngIf="drawerMode === DrawerMode.add"></app-newlocation>
 
-      <!--
-        <app-newlocation *ngIf="drawerMode === DrawerMode.add"></app-newlocation>
-        <app-editlocation *ngIf="drawerMode === DrawerMode.edit" [location]="locationSelected"></app-editlocation>-->
+      <app-editlocation *ngIf="drawerMode === DrawerMode.edit" [location]="locationSelected"></app-editlocation>
       <ng-container *ngIf="drawerMode === DrawerMode.filter">
         <h1>Filtres</h1>
+        <div class="gap-4 flex flex-col">
+          <button class="btn btn-primary">Factures</button>
 
-        Tous les taxis utilisés sans doublon Toutes les locations entre deux dates Toutes les adresses où il s'est rendu
-        sans doublon
+          <button class="btn btn-primary">Locations</button>
+        </div>
+
+        <!--
+            Tous les taxis utilisés sans doublon
+            Toutes les locations entre deux dates
+            Toutes les adresses où il s'est rendu sans doublon
+            -->
       </ng-container>
     </div>
   </div>
