@@ -169,6 +169,7 @@ export class LocationsComponent implements OnInit, OnChanges {
   }
 
   editLocation(location: Location) {
+    this.drawerMode = DrawerMode.edit;
     this.locationSelected = location;
 
     const drawerElement = document.getElementById('my-drawer') as HTMLInputElement;

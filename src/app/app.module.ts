@@ -20,6 +20,9 @@ import { EdittaxisComponent } from './components/edittaxis/edittaxis.component';
 import { AdressesComponent } from './components/adresses/adresses.component';
 import { EditadressesComponent } from './components/editadresses/editadresses.component';
 import { NewadressesComponent } from './components/newadresses/newadresses.component';
+import { FacturesComponent } from './components/factures/factures.component';
+import { EditfacturesComponent } from './components/editfactures/editfactures.component';
+import { NewfacturesComponent } from './components/newfactures/newfactures.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +41,10 @@ import { NewadressesComponent } from './components/newadresses/newadresses.compo
     EdittaxisComponent,
     AdressesComponent,
     EditadressesComponent,
-    NewadressesComponent
+    NewadressesComponent,
+    FacturesComponent,
+    EditfacturesComponent,
+    NewfacturesComponent
   ],
   imports: [
     BrowserModule,
