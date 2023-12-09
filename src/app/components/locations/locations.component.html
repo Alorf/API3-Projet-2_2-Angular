@@ -29,11 +29,15 @@
           <input #collapseCheckbox type="checkbox" (click)="hideTable()" />
           <div class="collapse-title text-xl font-medium">{{ collapseMode }}</div>
           <div class="collapse-content">
-            <app-editlocation
-              *ngIf="collapseMode == CollapseMode.edit"
-              [location]="locationSelected"
-              (editLocation)="onEditLocation($event)"
-            ></app-editlocation>
+            <div class="flex flex-col w-full lg:flex-row">
+              <app-editlocation
+                *ngIf="collapseMode == CollapseMode.edit"
+                [location]="locationSelected"
+                (editLocation)="onEditLocation($event)"
+              ></app-editlocation>
+              <div class="divider lg:divider-horizontal">Ou</div>
+              <app-factures *ngIf="collapseMode == CollapseMode.edit" [location]="locationSelected"></app-factures>
+            </div>
 
             <app-newlocation
               *ngIf="collapseMode == CollapseMode.add"

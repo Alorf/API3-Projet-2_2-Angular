@@ -13,7 +13,7 @@
       }"
     />
     <label *ngIf="submitted && adresseFormGroup.controls.rue.errors">
-      <span *ngIf="adresseFormGroup.controls.rue.errors.required"> rue obligatoire </span>
+      <span class="text-red-500" *ngIf="adresseFormGroup.controls.rue.errors.required"> rue obligatoire </span>
     </label>
   </div>
 
@@ -31,7 +31,7 @@
       }"
     />
     <label *ngIf="submitted && adresseFormGroup.controls.num.errors">
-      <span *ngIf="adresseFormGroup.controls.num.errors.required"> num obligatoire </span>
+      <span class="text-red-500" *ngIf="adresseFormGroup.controls.num.errors.required"> num obligatoire </span>
     </label>
   </div>
   <div>
@@ -48,7 +48,9 @@
       }"
     />
     <label *ngIf="submitted && adresseFormGroup.controls.localite.errors">
-      <span *ngIf="adresseFormGroup.controls.localite.errors.required"> localite obligatoire </span>
+      <span class="text-red-500" *ngIf="adresseFormGroup.controls.localite.errors.required">
+        localite obligatoire
+      </span>
     </label>
   </div>
   <div>
@@ -65,7 +67,7 @@
       }"
     />
     <label *ngIf="submitted && adresseFormGroup.controls.cp.errors">
-      <span *ngIf="adresseFormGroup.controls.cp.errors.required"> cp obligatoire </span>
+      <span class="text-red-500" *ngIf="adresseFormGroup.controls.cp.errors.required"> cp obligatoire </span>
     </label>
   </div>
 

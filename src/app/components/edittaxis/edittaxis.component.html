@@ -13,7 +13,9 @@
       }"
     />
     <label *ngIf="submitted && taxiFormGroup.controls.immatriculation.errors">
-      <span *ngIf="taxiFormGroup.controls.immatriculation.errors.required"> immatriculation obligatoire </span>
+      <span class="text-red-500" *ngIf="taxiFormGroup.controls.immatriculation.errors.required">
+        immatriculation obligatoire
+      </span>
     </label>
   </div>
 
@@ -31,7 +33,7 @@
       }"
     />
     <label *ngIf="submitted && taxiFormGroup.controls.carburant.errors">
-      <span *ngIf="taxiFormGroup.controls.carburant.errors.required"> carburant obligatoire </span>
+      <span class="text-red-500" *ngIf="taxiFormGroup.controls.carburant.errors.required"> carburant obligatoire </span>
     </label>
   </div>
   <div>
@@ -48,7 +50,7 @@
       }"
     />
     <label *ngIf="submitted && taxiFormGroup.controls.prixKm.errors">
-      <span *ngIf="taxiFormGroup.controls.prixKm.errors.required"> prixKm obligatoire </span>
+      <span class="text-red-500" *ngIf="taxiFormGroup.controls.prixKm.errors.required"> prixKm obligatoire </span>
     </label>
   </div>
 

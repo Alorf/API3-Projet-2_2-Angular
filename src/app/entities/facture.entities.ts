@@ -1,5 +1,7 @@
 export interface Facture {
-  idlocation: number;
-  idtaxi: string;
+  id: {
+    idLocation: number;
+    idTaxi: number;
+  };
   cout: number;
 }
