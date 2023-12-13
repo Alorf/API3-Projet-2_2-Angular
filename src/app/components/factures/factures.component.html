@@ -23,7 +23,7 @@
   <ng-container *ngIf="factures">
     <ng-container *ngIf="factures.length > 0; else inconnu">
       <div class="overflow-x-auto">
-        <table class="table" [contentEditable]="true">
+        <table class="table">
           <!-- head -->
           <thead>
             <tr>
@@ -36,9 +36,9 @@
           <tbody>
             <!-- row 1 -->
             <tr *ngFor="let c of factures">
-              <th>{{ c.id.idLocation }}</th>
+              <th>{{ c.location.id }}</th>
               <th>
-                {{ foundImmatriculation(c.id.idTaxi) }}
+                {{ c.taxi.immatriculation }}
               </th>
               <td>{{ c.cout }}</td>
               <td class="join">
@@ -72,7 +72,7 @@
 
 <dialog #deleteModal class="modal">
   <div class="modal-box">
-    <h3 class="font-bold text-lg">Voulez-vous vraiment supprimer {{ factureSelected?.id }}?</h3>
+    <h3 class="font-bold text-lg">Voulez-vous vraiment supprimer {{ factureSelected }}?</h3>
     <p class="py-4">Cela supprimera définitivement ce facture</p>
     <div class="modal-action">
       <form method="dialog" class="join">

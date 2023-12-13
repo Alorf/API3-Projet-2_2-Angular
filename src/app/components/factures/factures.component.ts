@@ -25,7 +25,7 @@ export class FacturesComponent implements OnInit, OnChanges {
 
   isSelected: boolean = false;
 
-  constructor(private facturesService: FacturesService, private taxisService: TaxisService, private router: Router) {}
+  constructor(private facturesService: FacturesService, private router: Router) {}
 
   page: number = 0;
   isButtonPreviousDisabled = false; // change this value to true to disable the button
@@ -40,14 +40,10 @@ export class FacturesComponent implements OnInit, OnChanges {
       if (data.last) this.isButtonNextDisabled = true;
       if (data.first) this.isButtonPreviousDisabled = true;
     });
-
-    this.taxisService.getAllTaxis().subscribe((data: any) => {
-      this.taxis = data;
-    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.location && changes.locationSelected.currentValue && this.location !== undefined) {
+    if (changes.location && changes.location.currentValue && this.location !== undefined) {
       this.facturesService.getPaginatorFacturesByIdLocation(this.location, 0, 5, 'cout').subscribe((data: any) => {
         this.factures = data.content;
         this.page = data.number;
@@ -133,7 +129,7 @@ export class FacturesComponent implements OnInit, OnChanges {
         //alert('index = ' + index);
         this.alertComponent?.show(
           AlertType.ok,
-          'Facture ' + this.factureSelected.id.idLocation + ' ' + this.factureSelected.id.idTaxi + ' supprimé',
+          'Facture ' + this.factureSelected.location.id + ' ' + this.factureSelected.taxi.id + ' supprimé',
         );
         if (!(index === undefined) && index > -1) {
           this.factures?.splice(index, 1);

@@ -12,7 +12,7 @@ export class FacturesService {
   constructor(private http: HttpClient) {}
 
   getFacture(facture: Facture): Observable<Facture> {
-    return this.http.get<Facture>(this.host + '/factures/' + facture.id.idLocation + '/' + facture.id.idTaxi);
+    return this.http.get<Facture>(this.host + '/factures/' + facture.location.id + '/' + facture.taxi.id);
   }
 
   searchFactures(location: Location): Observable<Facture[]> {
@@ -26,7 +26,7 @@ export class FacturesService {
   }
 
   deleteFacture(c: Facture): Observable<void> {
-    return this.http.delete<void>(this.host + '/factures/' + c.id.idLocation + '/' + c.id.idTaxi);
+    return this.http.delete<void>(this.host + '/factures/' + c.location.id + '/' + c.taxi.id);
   }
 
   save(c: Facture): Observable<Facture> {
@@ -36,6 +36,6 @@ export class FacturesService {
   }
 
   updateFacture(c: Facture): Observable<Facture> {
-    return this.http.put<Facture>(this.host + '/factures/' + c.id, c);
+    return this.http.put<Facture>(this.host + '/factures/' + c.location.id + '/' + c.taxi.id, c);
   }
 }

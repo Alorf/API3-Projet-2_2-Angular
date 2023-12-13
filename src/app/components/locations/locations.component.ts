@@ -63,6 +63,13 @@ export class LocationsComponent implements OnInit, OnChanges {
       this.locationsService.searchLocations(this.client).subscribe((data: any) => {
         this.locations = data;
       });
+
+      if (this.collapseCheckbox){
+        this.collapseCheckbox.nativeElement.checked = false;
+        this.isAdding = false;
+        this.collapseMode = CollapseMode.add;
+      }
+      
     }
   }
 
