@@ -1,1 +1,31 @@
-<p>newfactures works!</p>
+
+    <td>
+      {{ location?.id }}
+    
+    </td>
+
+    <td>
+
+          <select
+            class="select select-bordered"
+            
+            [ngClass]="{
+              'input-error': submitted
+            }"
+          >
+            <option value="{{ taxi.id }}" *ngFor="let taxi of taxis" >{{ taxi.immatriculation }}</option>
+          </select>
+          <div class="label" *ngIf="submitted ">
+            <span class="text-red-500"> Taxi obligatoire </span>
+          </div>
+    </td>
+
+    <td>
+        {{location?.kmTotal!}}
+    </td>
+
+    <td>
+    <!--<button (click)="onSaveClient()" class="btn btn-primary">Ajouter</button>-->
+    </td>
+
+  

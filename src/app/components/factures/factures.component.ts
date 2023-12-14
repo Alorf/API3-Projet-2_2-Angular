@@ -150,10 +150,6 @@ export class FacturesComponent implements OnInit, OnChanges {
     this.factureSelected = facture;
   }
 
-  foundImmatriculation(idTaxi: number) {
-    return this.taxis?.find(t => t.id === idTaxi)?.immatriculation;
-  }
-
   updateFacture() {
     console.log('update location');
 

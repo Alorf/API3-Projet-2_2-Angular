@@ -4,7 +4,7 @@ import { Client } from "./clients.entities";
 export interface Location {
   id: number;
   dateloc: string;
-  kmTotal: string;
+  kmTotal: number;
   cp: number;
   client : Client;
   adrDepart: Adresse;

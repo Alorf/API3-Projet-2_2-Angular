@@ -35,6 +35,7 @@
           </thead>
           <tbody>
             <!-- row 1 -->
+              <tr app-newfactures [location]="location"></tr>
             <tr *ngFor="let c of factures">
               <th>{{ c.location.id }}</th>
               <th>
