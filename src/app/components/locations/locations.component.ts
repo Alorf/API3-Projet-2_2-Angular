@@ -20,6 +20,7 @@ export class LocationsComponent implements OnInit, OnChanges {
   @Input({ required: true }) client: Client | undefined;
   @ViewChild('deleteModal') deleteModal!: ElementRef;
   @ViewChild('addModal') addModal!: ElementRef;
+  @ViewChild('facturationModal') facturationModal!: ElementRef;
   @ViewChild('collapseCheckbox') collapseCheckbox!: ElementRef;
 
   @ViewChild('alertComponent', { static: false }) alertComponent: AlertComponent | undefined;
@@ -46,8 +47,8 @@ export class LocationsComponent implements OnInit, OnChanges {
         this.locations = data.content;
         this.page = data.number;
 
-        if (data.last) this.isButtonNextDisabled = true;
-        if (data.first) this.isButtonPreviousDisabled = true;
+        this.isButtonNextDisabled = data.last;
+        this.isButtonPreviousDisabled = data.first;
       });
     } else {
       console.log('clienttt = ', this.client);
@@ -64,24 +65,20 @@ export class LocationsComponent implements OnInit, OnChanges {
         this.locations = data;
       });
 
-      if (this.collapseCheckbox){
+      if (this.collapseCheckbox) {
         this.collapseCheckbox.nativeElement.checked = false;
         this.isAdding = false;
         this.collapseMode = CollapseMode.add;
       }
-      
     }
   }
 
   pageNext() {
     this.locationsService.getPaginatorLocations(++this.page, 5, 'id').subscribe((data: any) => {
       this.locations = data.content;
-      this.isButtonPreviousDisabled = false;
 
-      if (data.last) {
-        this.isButtonNextDisabled = true;
-        this.isButtonPreviousDisabled = false;
-      }
+      this.isButtonNextDisabled = data.last;
+      this.isButtonPreviousDisabled = data.first;
     });
   }
 
@@ -90,20 +87,17 @@ export class LocationsComponent implements OnInit, OnChanges {
       this.locations = data.content;
       this.page = data.number;
 
-      if (data.last) this.isButtonNextDisabled = true;
-      if (data.first) this.isButtonPreviousDisabled = true;
+      this.isButtonNextDisabled = data.last;
+      this.isButtonPreviousDisabled = data.first;
     });
   }
 
   pagePrevious() {
     this.locationsService.getPaginatorLocations(--this.page, 5, 'id').subscribe((data: any) => {
       this.locations = data.content;
-      this.isButtonNextDisabled = false;
 
-      if (data.first) {
-        this.isButtonNextDisabled = false;
-        this.isButtonPreviousDisabled = true;
-      }
+      this.isButtonNextDisabled = data.last;
+      this.isButtonPreviousDisabled = data.first;
     });
   }
 
@@ -211,6 +205,17 @@ export class LocationsComponent implements OnInit, OnChanges {
     const drawerElement = document.getElementById('my-drawer') as HTMLInputElement;
     if (drawerElement) {
       drawerElement.checked = true;
+    }
+  }
+
+  openFacturation() {
+    const drawerElement = document.getElementById('my-drawer') as HTMLInputElement;
+    if (drawerElement) {
+      drawerElement.checked = false;
+    }
+
+    if (this.facturationModal) {
+      this.facturationModal.nativeElement.showModal();
     }
   }
 }

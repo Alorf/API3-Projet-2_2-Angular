@@ -22,6 +22,7 @@ export class FacturesComponent implements OnInit, OnChanges {
   factures?: Facture[];
   taxis?: Taxi[];
   factureSelected?: Facture;
+  isAdding: boolean = false;
 
   isSelected: boolean = false;
 
@@ -33,62 +34,56 @@ export class FacturesComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     if (this.location === undefined) return;
-    this.facturesService.getPaginatorFacturesByIdLocation(this.location, 0, 5, 'cout').subscribe((data: any) => {
+    this.facturesService.getPaginatorFacturesByIdLocation(this.location, 0, 4, 'cout').subscribe((data: any) => {
       this.factures = data.content;
       this.page = data.number;
 
-      if (data.last) this.isButtonNextDisabled = true;
-      if (data.first) this.isButtonPreviousDisabled = true;
+      this.isButtonNextDisabled = data.last;
+      this.isButtonPreviousDisabled = data.first;
     });
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.location && changes.location.currentValue && this.location !== undefined) {
-      this.facturesService.getPaginatorFacturesByIdLocation(this.location, 0, 5, 'cout').subscribe((data: any) => {
+      this.facturesService.getPaginatorFacturesByIdLocation(this.location, 0, 4, 'cout').subscribe((data: any) => {
         this.factures = data.content;
         this.page = data.number;
 
-        if (data.last) this.isButtonNextDisabled = true;
-        if (data.first) this.isButtonPreviousDisabled = true;
+        this.isButtonNextDisabled = data.last;
+        this.isButtonPreviousDisabled = data.first;
       });
     }
   }
 
   pageNext() {
     this.facturesService
-      .getPaginatorFacturesByIdLocation(this.location!, ++this.page, 5, 'cout')
+      .getPaginatorFacturesByIdLocation(this.location!, ++this.page, 4, 'cout')
       .subscribe((data: any) => {
         this.factures = data.content;
-        this.isButtonPreviousDisabled = false;
 
-        if (data.last) {
-          this.isButtonNextDisabled = true;
-          this.isButtonPreviousDisabled = false;
-        }
+        this.isButtonNextDisabled = data.last;
+        this.isButtonPreviousDisabled = data.first;
       });
   }
 
   reloadCurrentPage(page: number) {
-    this.facturesService.getPaginatorFacturesByIdLocation(this.location!, page, 5, 'cout').subscribe((data: any) => {
+    this.facturesService.getPaginatorFacturesByIdLocation(this.location!, page, 4, 'cout').subscribe((data: any) => {
       this.factures = data.content;
       this.page = data.number;
 
-      if (data.last) this.isButtonNextDisabled = true;
-      if (data.first) this.isButtonPreviousDisabled = true;
+      this.isButtonNextDisabled = data.last;
+      this.isButtonPreviousDisabled = data.first;
     });
   }
 
   pagePrevious() {
     this.facturesService
-      .getPaginatorFacturesByIdLocation(this.location!, --this.page, 5, 'cout')
+      .getPaginatorFacturesByIdLocation(this.location!, --this.page, 4, 'cout')
       .subscribe((data: any) => {
         this.factures = data.content;
-        this.isButtonNextDisabled = false;
 
-        if (data.first) {
-          this.isButtonNextDisabled = false;
-          this.isButtonPreviousDisabled = true;
-        }
+        this.isButtonNextDisabled = data.last;
+        this.isButtonPreviousDisabled = data.first;
       });
   }
 
@@ -104,7 +99,9 @@ export class FacturesComponent implements OnInit, OnChanges {
     }
   }
 
-  onNewFacture() {}
+  onNewFacture() {
+    this.isAdding = true;
+  }
 
   showModal() {
     if (this.deleteModal) {
@@ -116,6 +113,8 @@ export class FacturesComponent implements OnInit, OnChanges {
     //let v = confirm('Etes vous sur de vouloir supprimer ce facture ?');
     this.showModal();
     this.factureSelected = c;
+
+    //fixme: envoyer un event au composant enfant
   }
 
   onDelete() {
@@ -131,9 +130,12 @@ export class FacturesComponent implements OnInit, OnChanges {
           AlertType.ok,
           'Facture ' + this.factureSelected.location.id + ' ' + this.factureSelected.taxi.id + ' supprimé',
         );
+        /*
         if (!(index === undefined) && index > -1) {
           this.factures?.splice(index, 1);
         }
+        */
+        this.reloadCurrentPage(this.page);
       },
       error: err => {
         this.alertComponent?.show(AlertType.error, err.headers.get('error'));
@@ -173,5 +175,9 @@ export class FacturesComponent implements OnInit, OnChanges {
     setTimeout(() => {
       this.alertComponent?.hide();
     }, 5000);
+  }
+
+  onAddFacture(facture: Facture) {
+    this.reloadCurrentPage(this.page);
   }
 }

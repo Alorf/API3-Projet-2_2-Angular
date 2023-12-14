@@ -36,17 +36,15 @@ export class ClientsComponent implements OnInit {
   ngOnInit(): void {
     this.clientsService.getPaginatorClients(0, 5, 'nom').subscribe((data: any) => {
       this.clients = data.content;
-      this.page = data.number;
 
-      if (data.last) this.isButtonNextDisabled = true;
-      if (data.first) this.isButtonPreviousDisabled = true;
+      this.isButtonNextDisabled = data.last;
+      this.isButtonPreviousDisabled = data.first;
     });
   }
 
   pageNext() {
     this.clientsService.getPaginatorClients(++this.page, 5, 'nom').subscribe((data: any) => {
       this.clients = data.content;
-      this.isButtonPreviousDisabled = false;
 
       if (data.last) {
         this.isButtonNextDisabled = true;
@@ -60,20 +58,17 @@ export class ClientsComponent implements OnInit {
       this.clients = data.content;
       this.page = data.number;
 
-      if (data.last) this.isButtonNextDisabled = true;
-      if (data.first) this.isButtonPreviousDisabled = true;
+      this.isButtonNextDisabled = data.last;
+      this.isButtonPreviousDisabled = data.first;
     });
   }
 
   pagePrevious() {
     this.clientsService.getPaginatorClients(--this.page, 5, 'nom').subscribe((data: any) => {
       this.clients = data.content;
-      this.isButtonNextDisabled = false;
 
-      if (data.first) {
-        this.isButtonNextDisabled = false;
-        this.isButtonPreviousDisabled = true;
-      }
+      this.isButtonNextDisabled = data.last;
+      this.isButtonPreviousDisabled = data.first;
     });
   }
 

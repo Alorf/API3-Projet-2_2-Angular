@@ -1,31 +1,28 @@
+<td>
+  {{ location?.id }}
+</td>
 
-    <td>
-      {{ location?.id }}
-    
-    </td>
+<td colspan="2" *ngIf="taxis?.length === 0">Pas de taxi disponnible</td>
 
-    <td>
+<td *ngIf="taxis?.length != 0">
+  <select
+    class="select select-bordered"
+    [ngClass]="{
+      'input-error': submitted
+    }"
+    [formControl]="factureSelect!"
+  >
+    <option [ngValue]="taxi" *ngFor="let taxi of taxis">{{ taxi.immatriculation }}</option>
+  </select>
+  <div class="label" *ngIf="submitted && factureSelect?.errors">
+    <span class="text-red-500"> Taxi obligatoire </span>
+  </div>
+</td>
 
-          <select
-            class="select select-bordered"
-            
-            [ngClass]="{
-              'input-error': submitted
-            }"
-          >
-            <option value="{{ taxi.id }}" *ngFor="let taxi of taxis" >{{ taxi.immatriculation }}</option>
-          </select>
-          <div class="label" *ngIf="submitted ">
-            <span class="text-red-500"> Taxi obligatoire </span>
-          </div>
-    </td>
+<td *ngIf="taxis?.length != 0">
+  {{ location?.kmTotal! * factureSelect?.value?.prixKm! }}
+</td>
 
-    <td>
-        {{location?.kmTotal!}}
-    </td>
-
-    <td>
-    <!--<button (click)="onSaveClient()" class="btn btn-primary">Ajouter</button>-->
-    </td>
-
-  
+<td>
+  <button class="btn btn-primary" (click)="onSaveFacture()">Ajouter</button>
+</td>

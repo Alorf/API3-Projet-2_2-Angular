@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { Taxi } from '../entities/taxi.entities';
+import { Location } from '../entities/location.entities';
 
 @Injectable({ providedIn: 'root' })
 export class TaxisService {
@@ -20,6 +21,10 @@ export class TaxisService {
 
   getAllTaxis(): Observable<Taxi[]> {
     return this.http.get<Taxi[]>(this.host + '/taxis/all');
+  }
+
+  GetAllTaxiNotUsedInLocation(location: Location) {
+    return this.http.get<Taxi[]>(this.host + '/taxis/all/location=' + location!.id);
   }
 
   getPaginatorTaxis(page: number, size: number, sort: string) {

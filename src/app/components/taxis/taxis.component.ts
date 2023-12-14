@@ -37,20 +37,17 @@ export class TaxisComponent implements OnInit {
       this.taxis = data.content;
       this.page = data.number;
 
-      if (data.last) this.isButtonNextDisabled = true;
-      if (data.first) this.isButtonPreviousDisabled = true;
+      this.isButtonNextDisabled = data.last;
+      this.isButtonPreviousDisabled = data.first;
     });
   }
 
   pageNext() {
     this.taxisService.getPaginatorTaxis(++this.page, 5, 'immatriculation').subscribe((data: any) => {
       this.taxis = data.content;
-      this.isButtonPreviousDisabled = false;
 
-      if (data.last) {
-        this.isButtonNextDisabled = true;
-        this.isButtonPreviousDisabled = false;
-      }
+      this.isButtonNextDisabled = data.last;
+      this.isButtonPreviousDisabled = data.first;
     });
   }
 
@@ -59,20 +56,17 @@ export class TaxisComponent implements OnInit {
       this.taxis = data.content;
       this.page = data.number;
 
-      if (data.last) this.isButtonNextDisabled = true;
-      if (data.first) this.isButtonPreviousDisabled = true;
+      this.isButtonNextDisabled = data.last;
+      this.isButtonPreviousDisabled = data.first;
     });
   }
 
   pagePrevious() {
     this.taxisService.getPaginatorTaxis(--this.page, 5, 'immatriculation').subscribe((data: any) => {
       this.taxis = data.content;
-      this.isButtonNextDisabled = false;
 
-      if (data.first) {
-        this.isButtonNextDisabled = false;
-        this.isButtonPreviousDisabled = true;
-      }
+      this.isButtonNextDisabled = data.last;
+      this.isButtonPreviousDisabled = data.first;
     });
   }
 

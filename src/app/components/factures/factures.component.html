@@ -12,7 +12,7 @@
     </form>
     <div class="flex flex-row">
       <div class="join">
-        <button class="join-item btn btn-primary">Ajouter</button>
+        <button class="join-item btn btn-primary" (click)="onNewFacture()">Ajouter</button>
         <button class="join-item btn" [disabled]="isButtonPreviousDisabled" (click)="pagePrevious()">«</button>
         <button class="join-item btn" (click)="reloadCurrentPage(page)">Page {{ page + 1 }}</button>
         <button class="join-item btn" [disabled]="isButtonNextDisabled" (click)="pageNext()">»</button>
@@ -35,7 +35,7 @@
           </thead>
           <tbody>
             <!-- row 1 -->
-              <tr app-newfactures [location]="location"></tr>
+            <tr *ngIf="isAdding" app-newfactures [location]="location" (newFacture)="onAddFacture($event)"></tr>
             <tr *ngFor="let c of factures">
               <th>{{ c.location.id }}</th>
               <th>
@@ -43,7 +43,7 @@
               </th>
               <td>{{ c.cout }}</td>
               <td class="join">
-                <button class="join-item btn btn-error">Supprimer</button>
+                <button class="join-item btn btn-error" (click)="openDeleteModal(c)">Supprimer</button>
               </td>
             </tr>
           </tbody>
@@ -62,8 +62,9 @@
           </tr>
         </thead>
         <tbody>
+          <tr *ngIf="isAdding" app-newfactures [location]="location" (newFacture)="onAddFacture($event)"></tr>
           <tr class="w-full">
-            <td colspan="4" classs="text-center">Aucun facture</td>
+            <td colspan="4" classs="text-center">Aucune facture</td>
           </tr>
         </tbody>
       </table>
@@ -73,8 +74,10 @@
 
 <dialog #deleteModal class="modal">
   <div class="modal-box">
-    <h3 class="font-bold text-lg">Voulez-vous vraiment supprimer {{ factureSelected }}?</h3>
-    <p class="py-4">Cela supprimera définitivement ce facture</p>
+    <h3 class="font-bold text-lg">
+      Voulez-vous vraiment supprimer la facture contenant le taxi {{ factureSelected?.taxi?.immatriculation }}?
+    </h3>
+    <p class="py-4">Cela supprimera définitivement cette facture</p>
     <div class="modal-action">
       <form method="dialog" class="join">
         <button class="btn btn-error join-item" (click)="onDelete()">Oui</button>

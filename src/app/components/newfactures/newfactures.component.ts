@@ -1,9 +1,10 @@
-import { Component, OnInit, OnChanges, Input, Output, ViewChild, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, OnChanges, Input, Output, ViewChild, SimpleChanges, EventEmitter } from '@angular/core';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { FacturesService } from '../../services/facturesService';
 import { TaxisService } from '../../services/taxis.service';
 import { Location } from '../../entities/location.entities';
 import { Taxi } from '../../entities/taxi.entities';
+import { Facture } from '../../entities/facture.entities';
 
 @Component({
   selector: '[app-newfactures]',
@@ -11,20 +12,17 @@ import { Taxi } from '../../entities/taxi.entities';
   styleUrl: './newfactures.component.css',
 })
 export class NewfacturesComponent implements OnInit, OnChanges {
-  factureFormGroup?: FormGroup;
+  factureSelect?: FormControl | undefined;
   taxis?: Taxi[];
 
   @Input() location?: Location;
 
-  //@Output() newFacture = new EventEmitter<Facture>();
+  @Output() newFacture = new EventEmitter<Facture>();
+
   //@ViewChild('alertComponent') alertComponent: AlertComponent | undefined;
   submitted = false;
 
-  constructor(
-    private fb: FormBuilder,
-    private factureService: FacturesService,
-    private taxisService: TaxisService,
-  ) {}
+  constructor(private fb: FormBuilder, private factureService: FacturesService, private taxisService: TaxisService) {}
 
   ngOnInit(): void {
     this.loadForm();
@@ -38,50 +36,66 @@ export class NewfacturesComponent implements OnInit, OnChanges {
   }
 
   loadForm(): void {
+    this.factureSelect = new FormControl('', [Validators.required]);
 
-    this.taxisService.getAllTaxis().subscribe((data: any) => {
+    this.taxisService.GetAllTaxiNotUsedInLocation(this.location!).subscribe((data: any) => {
       this.taxis = data;
+      if (this.taxis!.length > 0) {
+        this.factureSelect?.setValue(this.taxis![0]);
+      } else {
+        this.factureSelect?.setValue({ immatriculation: 'Aucun taxi disponible' });
+
+        //Disable the select
+        this.factureSelect?.disable();
+      }
     });
 
+    /*
     this.factureFormGroup = this.fb.group({
       idlocation: [this.location?.id],
-      idtaxi: ['1', [Validators.required]],
+      idtaxi: [this.taxis![1], [Validators.required]],
     });
+    */
 
-    console.log(this.factureFormGroup?.value);
-    
+    //console.log(this.factureFormGroup?.value);
   }
 
   onSaveFacture() {
-    /*
+    console.log(this.factureSelect?.value);
+
     this.submitted = true;
-    if (this.factureFormGroup?.invalid) {
+    if (this.factureSelect?.invalid || this.taxis?.length === 0) {
       return;
     }
 
-    var body: any = {
-      dateloc: this.factureFormGroup?.value.dateloc,
-      kmTotal: this.factureFormGroup?.value.kmTotal,
+    var bbody: any = {
       location: {
-        id: this.location === undefined ? this.factureFormGroup?.value.idlocation : this.location.id,
+        id: this.location?.id,
       },
-      adrDepart: {
-        id: this.factureFormGroup?.value.idadresse,
+      taxi: {
+        id: this.factureSelect?.value.id,
       },
+      cout: 0,
     };
 
-    this.factureService.save(body).subscribe(
+    this.factureService.save(bbody).subscribe(
       data => {
-        this.alertComponent?.show(AlertType.ok, 'sauvegarde ok');
-        setTimeout(() => {
-          this.alertComponent?.hide();
-        }, 5000);
+        alert('Facture ajoutée avec succès');
         this.newFacture.emit(data);
+        //Delete the taxi from the list
+        this.taxis = this.taxis?.filter(t => t.id !== data.taxi.id);
+        if (this.taxis!.length > 0) {
+          this.factureSelect?.setValue(this.taxis![0]);
+        } else {
+          this.factureSelect?.setValue({ immatriculation: 'Aucun taxi disponible' });
+
+          //Disable the select
+          this.factureSelect?.disable();
+        }
       },
       err => {
-        this.alertComponent?.show(AlertType.error, err.headers.get('error'));
+        alert("Erreur lors de l'ajout de la facture");
       },
     );
-    */
   }
 }

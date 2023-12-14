@@ -29,7 +29,7 @@
           <input #collapseCheckbox type="checkbox" (click)="hideTable()" />
           <div class="collapse-title text-xl font-medium">{{ collapseMode }}</div>
           <div class="collapse-content">
-            <div class="flex flex-col w-full lg:flex-row">
+            <div class="flex flex-col w-full lg:flex-row" *ngIf="collapseMode == CollapseMode.edit">
               <app-editlocation
                 *ngIf="collapseMode == CollapseMode.edit"
                 [location]="locationSelected"
@@ -109,7 +109,7 @@
             </thead>
             <tbody>
               <tr class="w-full">
-                <td colspan="5" classs="text-center">Aucunne location</td>
+                <td colspan="5" classs="text-center">Aucune location</td>
               </tr>
             </tbody>
           </table>
@@ -139,6 +139,16 @@
       </form>
     </dialog>
 
+    <dialog #facturationModal class="modal">
+      <div class="modal-box w-11/12 max-w-5xl">
+        <h3 class="font-bold text-lg">Voici les facturation de la location {{ locationSelected?.id }}</h3>
+        <app-factures *ngIf="drawerMode === DrawerMode.filter" [location]="locationSelected"></app-factures>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
+
     <app-alert #alertComponent></app-alert>
   </div>
   <div class="drawer-side" *ngIf="client == null">
@@ -150,7 +160,7 @@
       <ng-container *ngIf="drawerMode === DrawerMode.filter">
         <h1>Filtres</h1>
         <div class="gap-4 flex flex-col">
-          <button class="btn btn-primary">Factures</button>
+          <button class="btn btn-primary" (click)="openFacturation()">Factures</button>
 
           <button class="btn btn-primary">Locations</button>
         </div>
