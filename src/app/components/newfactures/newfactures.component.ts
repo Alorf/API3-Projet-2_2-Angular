@@ -16,6 +16,7 @@ export class NewfacturesComponent implements OnInit, OnChanges {
   taxis?: Taxi[];
 
   @Input() location?: Location;
+  @Input() taxiAvailable: EventEmitter<Taxi> | undefined;
 
   @Output() newFacture = new EventEmitter<Facture>();
 
@@ -25,7 +26,21 @@ export class NewfacturesComponent implements OnInit, OnChanges {
   constructor(private fb: FormBuilder, private factureService: FacturesService, private taxisService: TaxisService) {}
 
   ngOnInit(): void {
+    this.subscribeToParentEmitter();
+
     this.loadForm();
+  }
+
+  subscribeToParentEmitter(): void {
+    this.taxiAvailable?.subscribe((data: Taxi) => {
+      console.log('Taxi available');
+
+      this.taxis?.push(data);
+      this.factureSelect?.enable();
+      this.factureSelect?.setValue(this.taxis![0]);
+
+      console.log(this.taxis);
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -43,8 +58,6 @@ export class NewfacturesComponent implements OnInit, OnChanges {
       if (this.taxis!.length > 0) {
         this.factureSelect?.setValue(this.taxis![0]);
       } else {
-        this.factureSelect?.setValue({ immatriculation: 'Aucun taxi disponible' });
-
         //Disable the select
         this.factureSelect?.disable();
       }

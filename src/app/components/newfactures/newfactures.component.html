@@ -20,7 +20,7 @@
 </td>
 
 <td *ngIf="taxis?.length != 0">
-  {{ location?.kmTotal! * factureSelect?.value?.prixKm! }}
+  {{ location?.kmTotal! * factureSelect?.value?.prixKm! | number : '1.2' }}
 </td>
 
 <td>

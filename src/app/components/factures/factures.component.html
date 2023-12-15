@@ -35,13 +35,19 @@
           </thead>
           <tbody>
             <!-- row 1 -->
-            <tr *ngIf="isAdding" app-newfactures [location]="location" (newFacture)="onAddFacture($event)"></tr>
+            <tr
+              *ngIf="isAdding"
+              app-newfactures
+              [location]="location"
+              [taxiAvailable]="taxiEmitter"
+              (newFacture)="onAddFacture($event)"
+            ></tr>
             <tr *ngFor="let c of factures">
               <th>{{ c.location.id }}</th>
               <th>
                 {{ c.taxi.immatriculation }}
               </th>
-              <td>{{ c.cout }}</td>
+              <td>{{ c.cout | number : '1.2' }}</td>
               <td class="join">
                 <button class="join-item btn btn-error" (click)="openDeleteModal(c)">Supprimer</button>
               </td>

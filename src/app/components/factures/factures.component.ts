@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges, ViewChild, ElementRef, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertComponent } from '../tools/alert/alert.component';
 import { AlertType } from '../tools/alert/enums/alert-type.enum';
@@ -18,6 +18,7 @@ export class FacturesComponent implements OnInit, OnChanges {
   @ViewChild('deleteModal') deleteModal!: ElementRef;
   @ViewChild('alertComponent', { static: false }) alertComponent: AlertComponent | undefined;
   @Input() location: Location | undefined;
+  taxiEmitter: EventEmitter<Taxi> = new EventEmitter<Taxi>();
 
   factures?: Facture[];
   taxis?: Taxi[];
@@ -119,6 +120,10 @@ export class FacturesComponent implements OnInit, OnChanges {
 
   onDelete() {
     if (this.factureSelected === undefined) return;
+
+    console.log(this.taxiEmitter);
+
+    this.taxiEmitter?.emit(this.factureSelected.taxi);
 
     this.facturesService.deleteFacture(this.factureSelected).subscribe({
       next: data => {
