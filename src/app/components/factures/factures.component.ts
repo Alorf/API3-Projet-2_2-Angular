@@ -34,8 +34,10 @@ export class FacturesComponent implements OnInit, OnChanges {
   isButtonNextDisabled = false; // change this value to true to disable the button
 
   ngOnInit(): void {
-    if (this.location === undefined) return;
-    this.facturesService.getPaginatorFacturesByIdLocation(this.location, 0, 4, 'cout').subscribe((data: any) => {
+    if (this.location != undefined) return;
+    console.log('ngOnInit');
+
+    this.facturesService.getPaginatorFacturesByIdLocation(this.location!, 0, 4, 'cout').subscribe((data: any) => {
       this.factures = data.content;
       this.page = data.number;
 
@@ -45,6 +47,8 @@ export class FacturesComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    console.log('onchange');
+
     if (changes.location && changes.location.currentValue && this.location !== undefined) {
       this.facturesService.getPaginatorFacturesByIdLocation(this.location, 0, 4, 'cout').subscribe((data: any) => {
         this.factures = data.content;

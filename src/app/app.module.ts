@@ -21,7 +21,6 @@ import { AdressesComponent } from './components/adresses/adresses.component';
 import { EditadressesComponent } from './components/editadresses/editadresses.component';
 import { NewadressesComponent } from './components/newadresses/newadresses.component';
 import { FacturesComponent } from './components/factures/factures.component';
-import { EditfacturesComponent } from './components/editfactures/editfactures.component';
 import { NewfacturesComponent } from './components/newfactures/newfactures.component';
 
 @NgModule({
@@ -43,17 +42,10 @@ import { NewfacturesComponent } from './components/newfactures/newfactures.compo
     EditadressesComponent,
     NewadressesComponent,
     FacturesComponent,
-    EditfacturesComponent,
-    NewfacturesComponent
+    NewfacturesComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule
-  ],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule, ReactiveFormsModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

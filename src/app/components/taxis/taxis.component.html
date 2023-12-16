@@ -47,7 +47,6 @@
                   <td>{{ t.prixKm | currency : 'EUR' }}</td>
                   <td class="join">
                     <button class="join-item btn btn-success" (click)="editTaxi(t)">Modifier</button>
-                    <button class="join-item btn btn-primary" (click)="openFilterDrawer(t)">Voir</button>
                     <button class="join-item btn btn-error" (click)="openDeleteModal(t)">Supprimer</button>
                   </td>
                 </tr>
@@ -98,14 +97,6 @@
     <div class="menu p-4 min-h-screen w-80 bg-base-200 text-base-content">
       <app-newtaxis *ngIf="drawerMode === DrawerMode.add"></app-newtaxis>
       <app-edittaxis *ngIf="drawerMode === DrawerMode.edit" [taxi]="taxiSelected"></app-edittaxis>
-      <ng-container *ngIf="drawerMode === DrawerMode.filter">
-        <h1>Filtres</h1>
-        <div class="gap-4 flex flex-col">
-          <button class="btn btn-primary">Locations</button>
-
-          <button class="btn btn-primary">Locations</button>
-        </div>
-      </ng-container>
     </div>
   </div>
 </div>

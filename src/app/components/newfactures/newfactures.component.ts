@@ -27,20 +27,6 @@ export class NewfacturesComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.subscribeToParentEmitter();
-
-    this.loadForm();
-  }
-
-  subscribeToParentEmitter(): void {
-    this.taxiAvailable?.subscribe((data: Taxi) => {
-      console.log('Taxi available');
-
-      this.taxis?.push(data);
-      this.factureSelect?.enable();
-      this.factureSelect?.setValue(this.taxis![0]);
-
-      console.log(this.taxis);
-    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -71,6 +57,18 @@ export class NewfacturesComponent implements OnInit, OnChanges {
     */
 
     //console.log(this.factureFormGroup?.value);
+  }
+
+  subscribeToParentEmitter(): void {
+    this.taxiAvailable?.subscribe((data: Taxi) => {
+      console.log('Taxi available');
+
+      this.taxis?.push(data);
+      this.factureSelect?.enable();
+      this.factureSelect?.setValue(this.taxis![0]);
+
+      console.log(this.taxis);
+    });
   }
 
   onSaveFacture() {

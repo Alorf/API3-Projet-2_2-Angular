@@ -48,7 +48,6 @@
                   <td>{{ a.cp }}</td>
                   <td class="join">
                     <button class="join-item btn btn-success" (click)="editAdresse(a)">Modifier</button>
-                    <button class="join-item btn btn-primary" (click)="openFilterDrawer(a)">Voir</button>
                     <button class="join-item btn btn-error" (click)="openDeleteModal(a)">Supprimer</button>
                   </td>
                 </tr>
@@ -98,14 +97,6 @@
     <div class="menu p-4 min-h-screen w-80 bg-base-200 text-base-content">
       <app-newadresses *ngIf="drawerMode === DrawerMode.add"></app-newadresses>
       <app-editadresses *ngIf="drawerMode === DrawerMode.edit" [adresse]="adresseSelected"></app-editadresses>
-      <ng-container *ngIf="drawerMode === DrawerMode.filter">
-        <h1>Filtres</h1>
-        <div class="gap-4 flex flex-col">
-          <button class="btn btn-primary">Locations</button>
-
-          <button class="btn btn-primary">Locations</button>
-        </div>
-      </ng-container>
     </div>
   </div>
 </div>

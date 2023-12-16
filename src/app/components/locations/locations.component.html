@@ -6,13 +6,21 @@
       <div class="flex justify-between py-2" *ngIf="client == undefined">
         <form class="join" #f="ngForm" (ngSubmit)="onSearch()">
           <input
-            type="text"
+            type="date"
             ngModel
-            name="nom"
-            placeholder="Type here"
+            name="date1"
+            placeholder="Première date"
             class="input input-bordered input-primary w-full max-w-xs join-item"
           />
-          <button class="btn btn-primary join-item">Rechercher</button>
+
+          <input
+            type="date"
+            ngModel
+            name="date2"
+            placeholder="Deuxième date"
+            class="input input-bordered input-primary w-full max-w-xs join-item"
+          />
+          <button class="btn btn-primary join-item">Rechercher entre deux date</button>
         </form>
         <div class="flex flex-row">
           <div class="join">
@@ -85,7 +93,7 @@
                     </button>
 
                     <button *ngIf="client == undefined" class="join-item btn btn-primary" (click)="openFilterDrawer(l)">
-                      Voir
+                      Facture
                     </button>
                     <button class="join-item btn btn-error" (click)="openDeleteModal(l)">Supprimer</button>
                   </td>

@@ -47,14 +47,17 @@ export class EditlocationComponent implements OnInit, OnChanges {
     });
 
     if (this.location === undefined) {
-      console.log('idlocation = ', this.idLocation);
-      console.log('location = ', this.location);
-
       this.locationService.getLocation(this.idLocation).subscribe(location => {
         this.loadForm(location);
       });
-    } else {
-      this.loadForm(this.location!);
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    //Quand l'input change de valeur, on met a jour le formulaire. Cela ne détruit pas le composant, mais le met a jour.
+    if (changes.location && changes.location.currentValue && this.location !== undefined) {
+      this.location = changes.location.currentValue;
+      this.loadForm(changes.location.currentValue);
     }
   }
 
@@ -66,14 +69,6 @@ export class EditlocationComponent implements OnInit, OnChanges {
       dateloc: [formatDate(location.dateloc, 'yyyy-MM-dd', 'en')],
       kmTotal: [location.kmTotal, [Validators.required, Validators.min(1)]],
     });
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    //Quand l'input change de valeur, on met a jour le formulaire. Cela ne détruit pas le composant, mais le met a jour.
-    if (changes.location && changes.location.currentValue && this.location !== undefined) {
-      this.location = changes.location.currentValue;
-      this.loadForm(changes.location.currentValue);
-    }
   }
 
   onUpdateLocation(): void {

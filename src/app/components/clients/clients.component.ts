@@ -1,11 +1,13 @@
 import { Component, ElementRef, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { Client } from '../../entities/clients.entities';
+
 import { ClientsService } from '../../services/clients.service';
 import { Router } from '@angular/router';
 import { last, timeout } from 'rxjs';
 import { AlertComponent } from '../tools/alert/alert.component';
 import { AlertType } from '../tools/alert/enums/alert-type.enum';
 import { DrawerMode } from '../tools/Enum/drawer-mode';
+import { ClientSpecial } from '../tools/Enum/client-special';
 
 @Component({
   selector: 'app-clients',
@@ -14,6 +16,7 @@ import { DrawerMode } from '../tools/Enum/drawer-mode';
 })
 export class ClientsComponent implements OnInit {
   DrawerMode = DrawerMode;
+  ClientSpecial = ClientSpecial;
 
   @ViewChild('deleteModal') deleteModal!: ElementRef;
   @ViewChild('locationModal') locationModal!: ElementRef;
@@ -21,6 +24,7 @@ export class ClientsComponent implements OnInit {
   @ViewChild('alertComponent', { static: false }) alertComponent: AlertComponent | undefined;
 
   drawerMode: DrawerMode = DrawerMode.add;
+  clientSpecial: ClientSpecial = ClientSpecial.Locations;
 
   clients?: Client[];
   clientSelected?: Client;
@@ -157,7 +161,9 @@ export class ClientsComponent implements OnInit {
     this.router.navigateByUrl('/editClient/' + c.id);
   }
 
-  openLocation() {
+  openSecialModal(pclientSpecial: ClientSpecial) {
+    this.clientSpecial = pclientSpecial;
+
     const drawerElement = document.getElementById('my-drawer') as HTMLInputElement;
     if (drawerElement) {
       drawerElement.checked = false;

@@ -40,8 +40,6 @@ export class LocationsComponent implements OnInit, OnChanges {
   isButtonNextDisabled = false; // change this value to true to disable the button
 
   ngOnInit(): void {
-    console.log('client = ', this.client);
-
     if (this.client === undefined) {
       this.locationsService.getPaginatorLocations(0, 5, 'id').subscribe((data: any) => {
         this.locations = data.content;
@@ -49,12 +47,6 @@ export class LocationsComponent implements OnInit, OnChanges {
 
         this.isButtonNextDisabled = data.last;
         this.isButtonPreviousDisabled = data.first;
-      });
-    } else {
-      console.log('clienttt = ', this.client);
-
-      this.locationsService.searchLocations(this.client).subscribe((data: any) => {
-        this.locations = data;
       });
     }
   }
@@ -202,10 +194,7 @@ export class LocationsComponent implements OnInit, OnChanges {
     this.drawerMode = DrawerMode.filter;
     this.locationSelected = location;
 
-    const drawerElement = document.getElementById('my-drawer') as HTMLInputElement;
-    if (drawerElement) {
-      drawerElement.checked = true;
-    }
+    this.openFacturation();
   }
 
   openFacturation() {

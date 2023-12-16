@@ -40,7 +40,9 @@ export class NewlocationComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    this.loadForm();
+    if (this.client === undefined) {
+      this.loadForm();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -51,6 +53,8 @@ export class NewlocationComponent implements OnInit, OnChanges {
   }
 
   loadForm(): void {
+    console.log('doupdate');
+
     if (this.client === undefined) {
       this.clientsService.getAllClients().subscribe((clients: Client[]) => {
         this.clients = clients;

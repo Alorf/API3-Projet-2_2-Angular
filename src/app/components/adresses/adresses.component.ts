@@ -97,21 +97,6 @@ export class AdressesComponent implements OnInit {
     }
   }
 
-  openFilterDrawer(adresse: Adresse) {
-    this.drawerMode = DrawerMode.filter;
-    this.adresseSelected = adresse;
-    console.log('adresseSelected = ', this.adresseSelected);
-
-    const drawerElement = document.getElementById('my-drawer') as HTMLInputElement;
-    if (drawerElement) {
-      drawerElement.checked = true;
-    }
-  }
-
-  voir() {
-    alert(this.adresseSelected);
-  }
-
   openDeleteModal(t: Adresse) {
     //let v = confirm('Etes vous sur de vouloir supprimer ce adresse ?');
     this.adresseSelected = t;

@@ -95,8 +95,22 @@
 
     <dialog #locationModal class="modal">
       <div class="modal-box w-11/12 max-w-5xl">
-        <h3 class="font-bold text-lg">Voici les locations de {{ clientSelected?.prenom }} {{ clientSelected?.nom }}</h3>
-        <app-locations *ngIf="drawerMode === DrawerMode.filter" [client]="clientSelected"></app-locations>
+        <div *ngIf="clientSpecial === ClientSpecial.Locations">
+          <h3 class="font-bold text-lg">
+            Voici les locations de {{ clientSelected?.prenom }} {{ clientSelected?.nom }}
+          </h3>
+          <app-locations *ngIf="drawerMode === DrawerMode.filter" [client]="clientSelected"></app-locations>
+        </div>
+
+        <div *ngIf="clientSpecial === ClientSpecial.TaxiSansDoublon">
+          <h3 class="font-bold text-lg">Taxi utilisé sans doublons</h3>
+          <app-taxis *ngIf="drawerMode === DrawerMode.filter" [client]="clientSelected"></app-taxis>
+        </div>
+
+        <div *ngIf="clientSpecial === ClientSpecial.AdrSansDoublon">
+          <h3 class="font-bold text-lg">Adresse sans doublons</h3>
+          <app-locations *ngIf="drawerMode === DrawerMode.filter" [client]="clientSelected"></app-locations>
+        </div>
       </div>
       <form method="dialog" class="modal-backdrop">
         <button>close</button>
@@ -113,10 +127,13 @@
       <ng-container *ngIf="drawerMode === DrawerMode.filter">
         <h1>Filtres</h1>
         <div class="gap-4 flex flex-col">
-          <button class="btn btn-primary" (click)="openLocation()">Locations</button>
-          <button class="btn btn-primary">Locations</button>
-
-          <button class="btn btn-primary">Locations</button>
+          <button class="btn btn-primary" (click)="openSecialModal(ClientSpecial.Locations)">Locations</button>
+          <button class="btn btn-primary" (click)="openSecialModal(ClientSpecial.TaxiSansDoublon)">
+            Taxi utilisé sans doublons
+          </button>
+          <button class="btn btn-primary" (click)="openSecialModal(ClientSpecial.AdrSansDoublon)">
+            Adresses de location
+          </button>
         </div>
 
         <!--

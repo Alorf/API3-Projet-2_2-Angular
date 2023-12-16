@@ -1,23 +1,25 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, OnChanges, ViewChild, SimpleChanges } from '@angular/core';
 import { DrawerMode } from '../tools/Enum/drawer-mode';
 import { TaxisService } from '../../services/taxis.service';
 import { Router } from '@angular/router';
 import { AlertComponent } from '../tools/alert/alert.component';
 import { Taxi } from '../../entities/taxi.entities';
 import { AlertType } from '../tools/alert/enums/alert-type.enum';
+import { Client } from '../../entities/clients.entities';
+import { ClientsService } from '../../services/clients.service';
 
 @Component({
   selector: 'app-taxis',
   templateUrl: './taxis.component.html',
   styleUrl: './taxis.component.css',
 })
-export class TaxisComponent implements OnInit {
+export class TaxisComponent implements OnInit, OnChanges {
   DrawerMode = DrawerMode;
 
   @ViewChild('deleteModal') deleteModal!: ElementRef;
   @ViewChild('locationModal') locationModal!: ElementRef;
-
   @ViewChild('alertComponent', { static: false }) alertComponent: AlertComponent | undefined;
+  @Input() client: Client | undefined;
 
   drawerMode: DrawerMode = DrawerMode.add;
 
@@ -26,20 +28,36 @@ export class TaxisComponent implements OnInit {
 
   isSelected: boolean = false;
 
-  constructor(private taxisService: TaxisService, private router: Router) {}
+  constructor(private taxisService: TaxisService, private clientsService: ClientsService, private router: Router) {}
 
   page: number = 0;
   isButtonPreviousDisabled = false; // change this value to true to disable the button
   isButtonNextDisabled = false; // change this value to true to disable the button
 
   ngOnInit(): void {
-    this.taxisService.getPaginatorTaxis(0, 5, 'immatriculation').subscribe((data: any) => {
-      this.taxis = data.content;
-      this.page = data.number;
+    if (this.client === undefined) {
+      this.taxisService.getPaginatorTaxis(0, 5, 'immatriculation').subscribe((data: any) => {
+        console.log('data = ', data);
 
-      this.isButtonNextDisabled = data.last;
-      this.isButtonPreviousDisabled = data.first;
-    });
+        this.taxis = data.content;
+        this.page = data.number;
+
+        this.isButtonNextDisabled = data.last;
+        this.isButtonPreviousDisabled = data.first;
+      });
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.client && changes.client.currentValue && this.client !== undefined) {
+      this.clientsService.getTaxisSansDoublon(this.client!, 0, 5, 'immatriculation').subscribe((data: any) => {
+        this.taxis = data.content;
+        this.page = data.number;
+
+        this.isButtonNextDisabled = data.last;
+        this.isButtonPreviousDisabled = data.first;
+      });
+    }
   }
 
   pageNext() {
@@ -100,21 +118,6 @@ export class TaxisComponent implements OnInit {
     if (this.deleteModal) {
       this.deleteModal.nativeElement.showModal();
     }
-  }
-
-  openFilterDrawer(taxi: Taxi) {
-    this.drawerMode = DrawerMode.filter;
-    this.taxiSelected = taxi;
-    console.log('taxiSelected = ', this.taxiSelected);
-
-    const drawerElement = document.getElementById('my-drawer') as HTMLInputElement;
-    if (drawerElement) {
-      drawerElement.checked = true;
-    }
-  }
-
-  voir() {
-    alert(this.taxiSelected);
   }
 
   openDeleteModal(t: Taxi) {
