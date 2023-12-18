@@ -129,8 +129,6 @@ export class LocationsComponent implements OnInit, OnChanges {
     this.showModal();
   }
 
-  onSearch() {}
-
   onDelete() {
     if (this.locationSelected === undefined) return;
 
@@ -195,6 +193,22 @@ export class LocationsComponent implements OnInit, OnChanges {
     this.locationSelected = location;
 
     this.openFacturation();
+  }
+
+  onSearch(value: any) {
+    //Recherche par date
+    console.log('value = ', value);
+
+    if (value.date1 === '' || value.date2 === '') {
+      this.alertComponent?.show(AlertType.error, 'Veuillez saisir une date correcte');
+    } else {
+      this.alertComponent?.hide();
+      this.alertComponent?.show(AlertType.ok, 'Recherche par date / Page stp');
+
+      this.locationsService.searchLocationsBetweenDate(value.date1, value.date2).subscribe((data: any) => {
+        console.log('data = ', data);
+      });
+    }
   }
 
   openFacturation() {

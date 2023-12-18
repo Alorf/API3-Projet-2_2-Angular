@@ -19,6 +19,10 @@ export class LocationsService {
     return this.http.get<Location[]>(this.host + '/locations/idclient=' + client.id);
   }
 
+  searchLocationsBetweenDate(d1: Date, d2: Date): Observable<Location[]> {
+    return this.http.get<Location[]>(this.host + '/locations/' + d1 + '/' + d2);
+  }
+
   getPaginatorLocations(page: number, size: number, sort: string) {
     return this.http.get<Location[]>(this.host + '/locations/allp?page=' + page + '&size=' + size + '&sort=' + sort);
   }

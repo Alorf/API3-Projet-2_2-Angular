@@ -4,7 +4,7 @@
   <div class="drawer-content">
     <div class="container">
       <div class="flex justify-between py-2" *ngIf="client == undefined">
-        <form class="join" #f="ngForm" (ngSubmit)="onSearch()">
+        <form class="join" #f="ngForm" (ngSubmit)="onSearch(f.value)">
           <input
             type="date"
             ngModel
