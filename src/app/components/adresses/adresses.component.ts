@@ -1,21 +1,24 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, OnChanges, ViewChild, SimpleChanges } from '@angular/core';
 import { DrawerMode } from '../tools/Enum/drawer-mode';
 import { AdressesService } from '../../services/adresses.service';
 import { Router } from '@angular/router';
 import { AlertComponent } from '../tools/alert/alert.component';
 import { AlertType } from '../tools/alert/enums/alert-type.enum';
 import { Adresse } from '../../entities/adresse.entities';
+import { Client } from '../../entities/clients.entities';
+import { ClientsService } from '../../services/clients.service';
 
 @Component({
   selector: 'app-adresses',
   templateUrl: './adresses.component.html',
   styleUrl: './adresses.component.css',
 })
-export class AdressesComponent implements OnInit {
+export class AdressesComponent implements OnInit, OnChanges {
   DrawerMode = DrawerMode;
 
   @ViewChild('deleteModal') deleteModal!: ElementRef;
   @ViewChild('locationModal') locationModal!: ElementRef;
+  @Input() client: Client | undefined;
 
   @ViewChild('alertComponent', { static: false }) alertComponent: AlertComponent | undefined;
 
@@ -26,20 +29,34 @@ export class AdressesComponent implements OnInit {
 
   isSelected: boolean = false;
 
-  constructor(private adressesService: AdressesService, private router: Router) {}
+  constructor(
+    private adressesService: AdressesService,
+    private clientsService: ClientsService,
+    private router: Router,
+  ) {}
 
   page: number = 0;
   isButtonPreviousDisabled = false; // change this value to true to disable the button
   isButtonNextDisabled = false; // change this value to true to disable the button
 
   ngOnInit(): void {
-    this.adressesService.getPaginatorAdresses(0, 5, 'cp').subscribe((data: any) => {
-      this.adresses = data.content;
-      this.page = data.number;
+    if (this.client === undefined) {
+      this.adressesService.getPaginatorAdresses(0, 5, 'cp').subscribe((data: any) => {
+        this.adresses = data.content;
+        this.page = data.number;
 
-      this.isButtonNextDisabled = data.last;
-      this.isButtonPreviousDisabled = data.first;
-    });
+        this.isButtonNextDisabled = data.last;
+        this.isButtonPreviousDisabled = data.first;
+      });
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.client && changes.client.currentValue && this.client !== undefined) {
+      this.clientsService.getAdresseLocationSansDoublon(this.client).subscribe((data: any) => {
+        this.adresses = data;
+      });
+    }
   }
 
   pageNext() {

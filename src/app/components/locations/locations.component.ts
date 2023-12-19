@@ -203,10 +203,19 @@ export class LocationsComponent implements OnInit, OnChanges {
       this.alertComponent?.show(AlertType.error, 'Veuillez saisir une date correcte');
     } else {
       this.alertComponent?.hide();
-      this.alertComponent?.show(AlertType.ok, 'Recherche par date / Page stp');
+
+      if (value.date1 > value.date2) {
+        let date3 = value.date1;
+        value.date1 = value.date2;
+        value.date2 = date3;
+      }
 
       this.locationsService.searchLocationsBetweenDate(value.date1, value.date2).subscribe((data: any) => {
-        console.log('data = ', data);
+        if (data.length == 0) {
+          this.alertComponent?.show(AlertType.error, 'Aucune location trouvée');
+          return;
+        }
+        this.locations = data;
       });
     }
   }

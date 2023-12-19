@@ -43,9 +43,11 @@ export class ClientsService {
     return this.http.put<Client>(this.host + '/clients/' + c.id, c);
   }
 
-  getTaxisSansDoublon(c: Client, page: number, size: number, sort: string): Observable<Client[]> {
-    return this.http.get<Client[]>(
-      this.host + '/clients/taxiSansDoublon/idclient=' + c.id + '?page=' + page + '&size=' + size + '&sort=' + sort,
-    );
+  getTaxisSansDoublon(c: Client): Observable<Client[]> {
+    return this.http.get<Client[]>(this.host + '/clients/taxiSansDoublon/idclient=' + c.id);
+  }
+
+  getAdresseLocationSansDoublon(c: Client): Observable<Client[]> {
+    return this.http.get<Client[]>(this.host + '/clients/adressesSansDoublon/idclient=' + c.id);
   }
 }

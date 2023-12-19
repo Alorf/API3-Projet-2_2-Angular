@@ -3,7 +3,7 @@
 
   <div class="drawer-content">
     <div class="container">
-      <div class="flex justify-between py-2">
+      <div class="flex justify-between py-2" *ngIf="!client">
         <form class="join" #f="ngForm" (ngSubmit)="onSearch(f.value)">
           <input
             type="text"
@@ -36,6 +36,7 @@
                   <th>Numéro</th>
                   <th>Localité</th>
                   <th>Code Postal</th>
+                  <th *ngIf="!client">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -46,7 +47,7 @@
                   <td>{{ a.num }}</td>
                   <td>{{ a.localite }}</td>
                   <td>{{ a.cp }}</td>
-                  <td class="join">
+                  <td class="join" *ngIf="!client">
                     <button class="join-item btn btn-success" (click)="editAdresse(a)">Modifier</button>
                     <button class="join-item btn btn-error" (click)="openDeleteModal(a)">Supprimer</button>
                   </td>
@@ -65,6 +66,7 @@
                 <th>Numéro</th>
                 <th>Localité</th>
                 <th>Code Postal</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -92,7 +94,7 @@
 
     <app-alert #alertComponent></app-alert>
   </div>
-  <div class="drawer-side">
+  <div class="drawer-side" *ngIf="!client">
     <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
     <div class="menu p-4 min-h-screen w-80 bg-base-200 text-base-content">
       <app-newadresses *ngIf="drawerMode === DrawerMode.add"></app-newadresses>

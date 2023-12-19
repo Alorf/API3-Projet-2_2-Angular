@@ -3,7 +3,7 @@
 
   <div class="drawer-content">
     <div class="container">
-      <div class="flex justify-between py-2">
+      <div class="flex justify-between py-2" *ngIf="!client">
         <form class="join" #f="ngForm" (ngSubmit)="onSearch(f.value)">
           <input
             type="text"
@@ -35,7 +35,7 @@
                   <th>Immatriculation</th>
                   <th>Carburant</th>
                   <th>PrixKM</th>
-                  <th>Actions</th>
+                  <th *ngIf="!client">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -45,7 +45,7 @@
                   <td>{{ t.immatriculation }}</td>
                   <td>{{ t.carburant }}</td>
                   <td>{{ t.prixKm | currency : 'EUR' }}</td>
-                  <td class="join">
+                  <td class="join" *ngIf="!client">
                     <button class="join-item btn btn-success" (click)="editTaxi(t)">Modifier</button>
                     <button class="join-item btn btn-error" (click)="openDeleteModal(t)">Supprimer</button>
                   </td>
@@ -92,7 +92,7 @@
 
     <app-alert #alertComponent></app-alert>
   </div>
-  <div class="drawer-side">
+  <div class="drawer-side" *ngIf="client == null">
     <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
     <div class="menu p-4 min-h-screen w-80 bg-base-200 text-base-content">
       <app-newtaxis *ngIf="drawerMode === DrawerMode.add"></app-newtaxis>

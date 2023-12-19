@@ -50,12 +50,8 @@ export class TaxisComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.client && changes.client.currentValue && this.client !== undefined) {
-      this.clientsService.getTaxisSansDoublon(this.client!, 0, 5, 'immatriculation').subscribe((data: any) => {
-        this.taxis = data.content;
-        this.page = data.number;
-
-        this.isButtonNextDisabled = data.last;
-        this.isButtonPreviousDisabled = data.first;
+      this.clientsService.getTaxisSansDoublon(this.client!).subscribe((data: any) => {
+        this.taxis = data;
       });
     }
   }

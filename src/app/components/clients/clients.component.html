@@ -109,7 +109,7 @@
 
         <div *ngIf="clientSpecial === ClientSpecial.AdrSansDoublon">
           <h3 class="font-bold text-lg">Adresse sans doublons</h3>
-          <app-locations *ngIf="drawerMode === DrawerMode.filter" [client]="clientSelected"></app-locations>
+          <app-adresses *ngIf="drawerMode === DrawerMode.filter" [client]="clientSelected"></app-adresses>
         </div>
       </div>
       <form method="dialog" class="modal-backdrop">
