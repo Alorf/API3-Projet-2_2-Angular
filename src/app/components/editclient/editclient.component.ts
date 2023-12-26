@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { ClientsService } from '../../services/clients.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -14,6 +14,7 @@ import { Client } from '../../entities/clients.entities';
 export class EditclientComponent implements OnInit, OnChanges {
   @ViewChild('alertComponent') alertComponent: AlertComponent | undefined;
   @Input({ required: true }) client: Client | undefined;
+  @Output() clientChange = new EventEmitter<Client>();
 
   clientFormGroup?: FormGroup;
   submitted = false;
@@ -59,15 +60,12 @@ export class EditclientComponent implements OnInit, OnChanges {
 
     this.clientService.updateClient(this.clientFormGroup?.value).subscribe(
       data => {
+        this.clientChange.emit(data);
         this.alertComponent?.show(AlertType.ok, 'sauvegarde ok');
       },
       err => {
         this.alertComponent?.show(AlertType.error, err.headers.get('error'));
       },
     );
-
-    setTimeout(() => {
-      this.alertComponent?.hide();
-    }, 5000);
   }
 }

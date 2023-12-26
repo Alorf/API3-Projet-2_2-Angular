@@ -37,9 +37,6 @@ export class NewadressesComponent implements OnInit {
         console.log('adresse enregistré');
 
         this.alertComponent?.show(AlertType.ok, 'sauvegarde ok');
-        setTimeout(() => {
-          this.alertComponent?.hide();
-        }, 5000);
       },
       err => {
         this.alertComponent?.show(AlertType.error, err.headers.get('error'));

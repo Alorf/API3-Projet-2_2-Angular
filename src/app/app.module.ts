@@ -22,6 +22,7 @@ import { EditadressesComponent } from './components/editadresses/editadresses.co
 import { NewadressesComponent } from './components/newadresses/newadresses.component';
 import { FacturesComponent } from './components/factures/factures.component';
 import { NewfacturesComponent } from './components/newfactures/newfactures.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { NewfacturesComponent } from './components/newfactures/newfactures.compo
     NewadressesComponent,
     FacturesComponent,
     NewfacturesComponent,
+    FooterComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule, ReactiveFormsModule],
   providers: [],

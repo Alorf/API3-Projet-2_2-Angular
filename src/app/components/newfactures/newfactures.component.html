@@ -14,8 +14,8 @@
   >
     <option [ngValue]="taxi" *ngFor="let taxi of taxis">{{ taxi.immatriculation }}</option>
   </select>
-  <div class="label" *ngIf="submitted && factureSelect?.errors">
-    <span class="text-red-500"> Taxi obligatoire </span>
+  <div class="label" *ngIf="submitted && factureSelect?.errors" class="text-red-500">
+    <span> Taxi obligatoire </span>
   </div>
 </td>
 

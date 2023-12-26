@@ -68,7 +68,7 @@ export class AdressesComponent implements OnInit, OnChanges {
     });
   }
 
-  reloadCurrentPage(page: number) {
+  reloadCurrentPage(page: number = this.page) {
     this.adressesService.getPaginatorAdresses(page, 5, 'cp').subscribe((data: any) => {
       this.adresses = data.content;
       this.page = data.number;
@@ -126,21 +126,22 @@ export class AdressesComponent implements OnInit, OnChanges {
     this.adressesService.deleteAdresse(this.adresseSelected).subscribe({
       next: data => {
         if (this.adresseSelected === undefined) return;
+        /*
         const index = this.adresses?.indexOf(this.adresseSelected, 0);
 
         //alert('index = ' + index);
         this.alertComponent?.show(AlertType.ok, 'Adresse ' + this.adresseSelected.cp + ' supprimé');
         if (!(index === undefined) && index > -1) {
           this.adresses?.splice(index, 1);
-        }
+        }*/
+
+        this.alertComponent?.show(AlertType.ok, 'Adresse ' + this.adresseSelected.cp + ' supprimé');
+        this.reloadCurrentPage();
       },
       error: err => {
         this.alertComponent?.show(AlertType.error, err.headers.get('error'));
       },
     });
-    setTimeout(() => {
-      this.alertComponent?.hide();
-    }, 5000);
   }
 
   editAdresse(c: Adresse) {
@@ -151,6 +152,17 @@ export class AdressesComponent implements OnInit, OnChanges {
     if (drawerElement) {
       drawerElement.checked = true;
     }
+  }
+  onAdresseEdited(adresse: Adresse) {
+    //Change in this.clients where id = client.id
+    this.adresses?.find((a: Adresse) => {
+      if (a.id === adresse.id) {
+        a.cp = adresse.cp;
+        a.localite = adresse.localite;
+        a.rue = adresse.rue;
+        a.num = adresse.num;
+      }
+    });
   }
 
   onEdit(c: Adresse) {

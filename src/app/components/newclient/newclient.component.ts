@@ -19,10 +19,10 @@ export class NewclientComponent implements OnInit {
 
   ngOnInit(): void {
     this.clientFormGroup = this.fb.group({
-      nom: ['', [Validators.required, Validators.min(2), Validators.max(50)]],
+      nom: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       prenom: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       mail: ['', [Validators.required, Validators.email]],
-      tel: ['+32(0) ', [Validators.required]],
+      tel: ['', [Validators.required]],
     });
   }
 
@@ -35,9 +35,6 @@ export class NewclientComponent implements OnInit {
     this.clientService.save(this.clientFormGroup?.value).subscribe(
       () => {
         this.alertComponent?.show(AlertType.ok, 'sauvegarde ok');
-        setTimeout(() => {
-          this.alertComponent?.hide();
-        }, 5000);
       },
       err => {
         this.alertComponent?.show(AlertType.error, err.headers.get('error'));

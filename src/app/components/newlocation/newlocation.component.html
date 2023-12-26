@@ -14,8 +14,8 @@
         <option value="{{ client.id }}" *ngIf="client != undefined" selected>{{ client.mail }}</option>
         <option value="{{ client.id }}" *ngFor="let client of clients">{{ client.mail }}</option>
       </select>
-      <div class="label" *ngIf="submitted && locationFormGroup.controls.idclient.errors">
-        <span class="text-red-500"> Client obligatoire </span>
+      <div class="label" *ngIf="submitted && locationFormGroup.controls.idclient.errors" class="text-red-500">
+        <span> Client obligatoire </span>
       </div>
     </label>
   </div>
@@ -36,8 +36,8 @@
           {{ adresse.rue }} {{ adresse.num }}, {{ adresse.localite }} {{ adresse.cp }}
         </option>
       </select>
-      <div class="label" *ngIf="submitted && locationFormGroup.controls.idadresse.errors">
-        <span class="text-red-500"> Adresse obligatoire </span>
+      <div class="label" *ngIf="submitted && locationFormGroup.controls.idadresse.errors" class="text-red-500">
+        <span> Adresse obligatoire </span>
       </div>
     </label>
   </div>
@@ -55,10 +55,8 @@
         'input-error': submitted && locationFormGroup.controls.dateloc.errors
       }"
     />
-    <label *ngIf="submitted && locationFormGroup.controls.dateloc.errors">
-      <span class="text-red-500" *ngIf="locationFormGroup.controls.dateloc.errors.required">
-        Date de location obligatoire
-      </span>
+    <label *ngIf="submitted && locationFormGroup.controls.dateloc.errors" class="text-red-500">
+      <span *ngIf="locationFormGroup.controls.dateloc.errors.required"> Date de location obligatoire </span>
     </label>
   </div>
   <div>
@@ -74,8 +72,8 @@
         'input-error': submitted && locationFormGroup.controls.kmTotal.errors
       }"
     />
-    <label *ngIf="submitted && locationFormGroup.controls.kmTotal.errors">
-      <span class="text-red-500" *ngIf="locationFormGroup.controls.kmTotal.errors.required"> kmTotal obligatoire </span>
+    <label *ngIf="submitted && locationFormGroup.controls.kmTotal.errors" class="text-red-500">
+      <span *ngIf="locationFormGroup.controls.kmTotal.errors"> kmTotal obligatoire </span>
     </label>
   </div>
   <!--

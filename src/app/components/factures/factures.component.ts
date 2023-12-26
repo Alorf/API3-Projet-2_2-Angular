@@ -150,9 +150,6 @@ export class FacturesComponent implements OnInit, OnChanges {
         this.alertComponent?.show(AlertType.error, err.headers.get('error'));
       },
     });
-    setTimeout(() => {
-      this.alertComponent?.hide();
-    }, 5000);
   }
 
   editFacture(c: Facture) {}
@@ -180,10 +177,6 @@ export class FacturesComponent implements OnInit, OnChanges {
         this.alertComponent?.show(AlertType.error, err.headers.get('error'));
       },
     );
-
-    setTimeout(() => {
-      this.alertComponent?.hide();
-    }, 5000);
   }
 
   onAddFacture(facture: Facture) {

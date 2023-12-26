@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { TaxisService } from '../../services/taxis.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -14,6 +14,7 @@ import { Taxi } from '../../entities/taxi.entities';
 export class EdittaxisComponent implements OnInit, OnChanges {
   @ViewChild('alertComponent') alertComponent: AlertComponent | undefined;
   @Input({ required: true }) taxi: Taxi | undefined;
+  @Output() taxiChange = new EventEmitter<Taxi>();
 
   taxiFormGroup?: FormGroup;
   submitted = false;
@@ -58,14 +59,11 @@ export class EdittaxisComponent implements OnInit, OnChanges {
     this.taxiService.updateTaxi(this.taxiFormGroup?.value).subscribe(
       data => {
         this.alertComponent?.show(AlertType.ok, 'sauvegarde ok');
+        this.taxiChange.emit(data);
       },
       err => {
         this.alertComponent?.show(AlertType.error, err.headers.get('error'));
       },
     );
-
-    setTimeout(() => {
-      this.alertComponent?.hide();
-    }, 5000);
   }
 }

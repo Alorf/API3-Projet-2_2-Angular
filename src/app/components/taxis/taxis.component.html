@@ -9,7 +9,7 @@
             type="text"
             ngModel
             name="immatriculation"
-            placeholder="Type here"
+            placeholder="Immatriculation"
             class="input input-bordered input-primary w-full max-w-xs join-item"
           />
           <button class="btn btn-primary join-item">Rechercher</button>
@@ -96,7 +96,11 @@
     <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
     <div class="menu p-4 min-h-screen w-80 bg-base-200 text-base-content">
       <app-newtaxis *ngIf="drawerMode === DrawerMode.add"></app-newtaxis>
-      <app-edittaxis *ngIf="drawerMode === DrawerMode.edit" [taxi]="taxiSelected"></app-edittaxis>
+      <app-edittaxis
+        *ngIf="drawerMode === DrawerMode.edit"
+        [taxi]="taxiSelected"
+        (taxiChange)="onTaxiEdited($event)"
+      ></app-edittaxis>
     </div>
   </div>
 </div>

@@ -12,14 +12,10 @@
         'input-error': submitted && clientFormGroup.controls.nom.errors
       }"
     />
-    <label *ngIf="submitted && clientFormGroup.controls.nom.errors">
-      <span class="text-red-500" *ngIf="clientFormGroup.controls.nom.errors.required"> Nom obligatoire </span>
-      <span class="text-red-500" *ngIf="clientFormGroup.controls.nom.errors.minLength">
-        Nom doit être plus grand que 2 charactères
-      </span>
-      <span class="text-red-500" *ngIf="clientFormGroup.controls.nom.errors.maxLength">
-        Nom doit être plus petit que 50 charactères
-      </span>
+    <label *ngIf="submitted && clientFormGroup.controls.nom.errors" class="text-red-500">
+      <span *ngIf="clientFormGroup.controls.nom.errors.required"> Nom obligatoire </span>
+      <span *ngIf="clientFormGroup.controls.nom.errors.minlength"> Nom doit être plus grand que 2 charactères </span>
+      <span *ngIf="clientFormGroup.controls.nom.errors.maxlength"> Nom doit être plus petit que 50 charactères </span>
     </label>
   </div>
 
@@ -36,12 +32,10 @@
         'input-error': submitted && clientFormGroup.controls.prenom.errors
       }"
     />
-    <label *ngIf="submitted && clientFormGroup.controls.prenom.errors">
-      <span class="text-red-500" *ngIf="clientFormGroup.controls.prenom.errors.required"> Nom obligatoire </span>
-      <span class="text-red-500" *ngIf="clientFormGroup.controls.prenom.errors.minLength">
-        Nom doit être plus grand que 2 charactères
-      </span>
-      <span class="text-red-500" *ngIf="clientFormGroup.controls.prenom.errors.maxLength">
+    <label *ngIf="submitted && clientFormGroup.controls.prenom.errors" class="text-red-500">
+      <span *ngIf="clientFormGroup.controls.prenom.errors.required"> Nom obligatoire </span>
+      <span *ngIf="clientFormGroup.controls.prenom.errors.minLength"> Nom doit être plus grand que 2 charactères </span>
+      <span *ngIf="clientFormGroup.controls.prenom.errors.maxLength">
         Nom doit être plus petit que 50 charactères
       </span>
     </label>
@@ -59,9 +53,9 @@
         'input-error': submitted && clientFormGroup.controls.mail.errors
       }"
     />
-    <label *ngIf="submitted && clientFormGroup.controls.mail.errors">
-      <span class="text-red-500" *ngIf="clientFormGroup.controls.mail.errors.required"> Mail obligatoire </span>
-      <span class="text-red-500" *ngIf="clientFormGroup.controls.mail.errors.email"> Mail invalide </span>
+    <label *ngIf="submitted && clientFormGroup.controls.mail.errors" class="text-red-500">
+      <span *ngIf="clientFormGroup.controls.mail.errors.required"> Mail obligatoire </span>
+      <span *ngIf="clientFormGroup.controls.mail.errors.email"> Mail invalide </span>
     </label>
   </div>
   <div>
@@ -77,8 +71,8 @@
         'input-error': submitted && clientFormGroup.controls.tel.errors
       }"
     />
-    <label *ngIf="submitted && clientFormGroup.controls.tel.errors">
-      <span class="text-red-500" *ngIf="clientFormGroup.controls.tel.errors.required"> Téléphone obligatoire </span>
+    <label *ngIf="submitted && clientFormGroup.controls.tel.errors" class="text-red-500">
+      <span *ngIf="clientFormGroup.controls.tel.errors.required"> Téléphone obligatoire </span>
     </label>
   </div>
 

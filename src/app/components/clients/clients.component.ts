@@ -57,7 +57,7 @@ export class ClientsComponent implements OnInit {
     });
   }
 
-  reloadCurrentPage(page: number) {
+  reloadCurrentPage(page: number = this.page) {
     this.clientsService.getPaginatorClients(page, 5, 'nom').subscribe((data: any) => {
       this.clients = data.content;
       this.page = data.number;
@@ -130,21 +130,21 @@ export class ClientsComponent implements OnInit {
     this.clientsService.deleteClient(this.clientSelected).subscribe({
       next: data => {
         if (this.clientSelected === undefined) return;
-        const index = this.clients?.indexOf(this.clientSelected, 0);
+        /*const index = this.clients?.indexOf(this.clientSelected, 0);
 
         //alert('index = ' + index);
         this.alertComponent?.show(AlertType.ok, 'Client ' + this.clientSelected.nom + ' supprimé');
         if (!(index === undefined) && index > -1) {
           this.clients?.splice(index, 1);
-        }
+        }*/
+
+        this.alertComponent?.show(AlertType.ok, 'Client ' + this.clientSelected.nom + ' supprimé');
+        this.reloadCurrentPage();
       },
       error: err => {
         this.alertComponent?.show(AlertType.error, err.headers.get('error'));
       },
     });
-    setTimeout(() => {
-      this.alertComponent?.hide();
-    }, 5000);
   }
 
   editClient(c: Client) {
@@ -159,6 +159,21 @@ export class ClientsComponent implements OnInit {
 
   onEdit(c: Client) {
     this.router.navigateByUrl('/editClient/' + c.id);
+  }
+
+  onClientEdited(client: Client) {
+    console.log('client = ', client);
+    console.log('this.clients = ', this.clients);
+
+    //Change in this.clients where id = client.id
+    this.clients?.find((c: Client) => {
+      if (c.id === client.id) {
+        c.nom = client.nom;
+        c.prenom = client.prenom;
+        c.mail = client.mail;
+        c.tel = client.tel;
+      }
+    });
   }
 
   openSecialModal(pclientSpecial: ClientSpecial) {

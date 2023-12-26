@@ -65,7 +65,7 @@ export class TaxisComponent implements OnInit, OnChanges {
     });
   }
 
-  reloadCurrentPage(page: number) {
+  reloadCurrentPage(page: number = this.page) {
     this.taxisService.getPaginatorTaxis(page, 5, 'immatriculation').subscribe((data: any) => {
       this.taxis = data.content;
       this.page = data.number;
@@ -93,6 +93,11 @@ export class TaxisComponent implements OnInit, OnChanges {
       console.log('taxis = ', this.taxis);
       this.alertComponent?.hide();
       this.taxisService.searchTaxis(value.immatriculation).subscribe((data: any) => {
+        if (data === null) {
+          this.taxis = [];
+          return;
+        }
+
         this.taxis = [];
         this.taxis?.push(data);
         console.log('taxis = ', this.taxis);
@@ -128,21 +133,21 @@ export class TaxisComponent implements OnInit, OnChanges {
     this.taxisService.deleteTaxi(this.taxiSelected).subscribe({
       next: data => {
         if (this.taxiSelected === undefined) return;
-        const index = this.taxis?.indexOf(this.taxiSelected, 0);
+        /*const index = this.taxis?.indexOf(this.taxiSelected, 0);
 
         //alert('index = ' + index);
         this.alertComponent?.show(AlertType.ok, 'Taxi ' + this.taxiSelected.immatriculation + ' supprimé');
         if (!(index === undefined) && index > -1) {
           this.taxis?.splice(index, 1);
-        }
+        }*/
+
+        this.alertComponent?.show(AlertType.ok, 'Taxi ' + this.taxiSelected.immatriculation + ' supprimé');
+        this.reloadCurrentPage();
       },
       error: err => {
         this.alertComponent?.show(AlertType.error, err.headers.get('error'));
       },
     });
-    setTimeout(() => {
-      this.alertComponent?.hide();
-    }, 5000);
   }
 
   editTaxi(c: Taxi) {
@@ -153,6 +158,17 @@ export class TaxisComponent implements OnInit, OnChanges {
     if (drawerElement) {
       drawerElement.checked = true;
     }
+  }
+
+  onTaxiEdited(taxi: Taxi) {
+    //Change in this.clients where id = client.id
+    this.taxis?.find((t: Taxi) => {
+      if (t.id === taxi.id) {
+        t.immatriculation = taxi.immatriculation;
+        t.carburant = taxi.carburant;
+        t.prixKm = taxi.prixKm;
+      }
+    });
   }
 
   onEdit(c: Taxi) {

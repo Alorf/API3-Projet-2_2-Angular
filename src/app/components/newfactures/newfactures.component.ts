@@ -5,6 +5,8 @@ import { TaxisService } from '../../services/taxis.service';
 import { Location } from '../../entities/location.entities';
 import { Taxi } from '../../entities/taxi.entities';
 import { Facture } from '../../entities/facture.entities';
+import { AlertComponent } from '../tools/alert/alert.component';
+import { AlertType } from '../tools/alert/enums/alert-type.enum';
 
 @Component({
   selector: '[app-newfactures]',
@@ -15,6 +17,7 @@ export class NewfacturesComponent implements OnInit, OnChanges {
   factureSelect?: FormControl | undefined;
   taxis?: Taxi[];
 
+  @Input() alertComponent: AlertComponent | undefined;
   @Input() location?: Location;
   @Input() taxiAvailable: EventEmitter<Taxi> | undefined;
 
@@ -91,7 +94,10 @@ export class NewfacturesComponent implements OnInit, OnChanges {
 
     this.factureService.save(bbody).subscribe(
       data => {
-        alert('Facture ajoutée avec succès');
+        //alert('Facture ajoutée avec succès');
+
+        this.alertComponent?.show(AlertType.ok, 'Facture ajoutée avec succès');
+
         this.newFacture.emit(data);
         //Delete the taxi from the list
         this.taxis = this.taxis?.filter(t => t.id !== data.taxi.id);
@@ -105,7 +111,7 @@ export class NewfacturesComponent implements OnInit, OnChanges {
         }
       },
       err => {
-        alert("Erreur lors de l'ajout de la facture");
+        this.alertComponent?.show(AlertType.error, "Erreur lors de l'ajout de la facture");
       },
     );
   }

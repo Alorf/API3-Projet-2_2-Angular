@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { AdressesService } from '../../services/adresses.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -14,6 +14,7 @@ import { Adresse } from '../../entities/adresse.entities';
 export class EditadressesComponent implements OnInit, OnChanges {
   @ViewChild('alertComponent') alertComponent: AlertComponent | undefined;
   @Input({ required: true }) adresse: Adresse | undefined;
+  @Output() adresseChange = new EventEmitter<Adresse>();
 
   adresseFormGroup?: FormGroup;
   submitted = false;
@@ -59,14 +60,11 @@ export class EditadressesComponent implements OnInit, OnChanges {
     this.adresseService.updateAdresse(this.adresseFormGroup?.value).subscribe(
       data => {
         this.alertComponent?.show(AlertType.ok, 'sauvegarde ok');
+        this.adresseChange.emit(data);
       },
       err => {
         this.alertComponent?.show(AlertType.error, err.headers.get('error'));
       },
     );
-
-    setTimeout(() => {
-      this.alertComponent?.hide();
-    }, 5000);
   }
 }

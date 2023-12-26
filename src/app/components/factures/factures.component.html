@@ -30,6 +30,7 @@
               app-newfactures
               [location]="location"
               [taxiAvailable]="taxiEmitter"
+              [alertComponent]="alertComponent"
               (newFacture)="onAddFacture($event)"
             ></tr>
             <tr *ngFor="let c of factures">

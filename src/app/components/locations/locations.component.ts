@@ -74,7 +74,7 @@ export class LocationsComponent implements OnInit, OnChanges {
     });
   }
 
-  reloadCurrentPage(page: number) {
+  reloadCurrentPage(page: number = this.page) {
     this.locationsService.getPaginatorLocations(page, 5, 'id').subscribe((data: any) => {
       this.locations = data.content;
       this.page = data.number;
@@ -135,21 +135,25 @@ export class LocationsComponent implements OnInit, OnChanges {
     this.locationsService.deleteLocation(this.locationSelected).subscribe({
       next: data => {
         if (this.locationSelected === undefined) return;
-        const index = this.locations?.indexOf(this.locationSelected, 0);
+        console.log(this.client);
 
-        //alert('index = ' + index);
-        this.alertComponent?.show(AlertType.ok, 'Location ' + this.locationSelected.id + ' supprimée');
-        if (!(index === undefined) && index > -1) {
-          this.locations?.splice(index, 1);
+        if (this.client != undefined) {
+          const index = this.locations?.indexOf(this.locationSelected, 0);
+
+          //alert('index = ' + index);
+          this.alertComponent?.show(AlertType.ok, 'Location ' + this.locationSelected.id + ' supprimée');
+          if (!(index === undefined) && index > -1) {
+            this.locations?.splice(index, 1);
+          }
+        } else {
+          this.alertComponent?.show(AlertType.ok, 'Location ' + this.locationSelected.id + ' supprimée');
+          this.reloadCurrentPage();
         }
       },
       error: err => {
         this.alertComponent?.show(AlertType.error, err.headers.get('error'));
       },
     });
-    setTimeout(() => {
-      this.alertComponent?.hide();
-    }, 5000);
   }
 
   editLocationCollapsed(location: Location) {

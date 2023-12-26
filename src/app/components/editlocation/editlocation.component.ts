@@ -81,8 +81,8 @@ export class EditlocationComponent implements OnInit, OnChanges {
 
     let body: any = {
       id: this.locationFormGroup?.value.id,
-      dateloc: '2023-11-08',
-      kmTotal: '56',
+      dateloc: this.locationFormGroup?.value.dateloc,
+      kmTotal: this.locationFormGroup?.value.kmTotal,
       client: {
         id: this.locationFormGroup?.value.idclient,
       },
@@ -100,9 +100,5 @@ export class EditlocationComponent implements OnInit, OnChanges {
         this.alertComponent?.show(AlertType.error, err.headers.get('error'));
       },
     );
-
-    setTimeout(() => {
-      this.alertComponent?.hide();
-    }, 5000);
   }
 }

@@ -12,8 +12,8 @@
         'input-error': submitted && adresseFormGroup.controls.rue.errors
       }"
     />
-    <label *ngIf="submitted && adresseFormGroup.controls.rue.errors">
-      <span class="text-red-500" *ngIf="adresseFormGroup.controls.rue.errors.required"> rue obligatoire </span>
+    <label *ngIf="submitted && adresseFormGroup.controls.rue.errors" class="text-red-500">
+      <span *ngIf="adresseFormGroup.controls.rue.errors.required"> rue obligatoire </span>
     </label>
   </div>
 
@@ -30,8 +30,8 @@
         'input-error': submitted && adresseFormGroup.controls.num.errors
       }"
     />
-    <label *ngIf="submitted && adresseFormGroup.controls.num.errors">
-      <span class="text-red-500" *ngIf="adresseFormGroup.controls.num.errors.required"> num obligatoire </span>
+    <label *ngIf="submitted && adresseFormGroup.controls.num.errors" class="text-red-500">
+      <span *ngIf="adresseFormGroup.controls.num.errors.required"> num obligatoire </span>
     </label>
   </div>
   <div>
@@ -47,10 +47,8 @@
         'input-error': submitted && adresseFormGroup.controls.localite.errors
       }"
     />
-    <label *ngIf="submitted && adresseFormGroup.controls.localite.errors">
-      <span class="text-red-500" *ngIf="adresseFormGroup.controls.localite.errors.required">
-        localite obligatoire
-      </span>
+    <label *ngIf="submitted && adresseFormGroup.controls.localite.errors" class="text-red-500">
+      <span *ngIf="adresseFormGroup.controls.localite.errors.required"> localite obligatoire </span>
     </label>
   </div>
   <div>
@@ -66,8 +64,8 @@
         'input-error': submitted && adresseFormGroup.controls.cp.errors
       }"
     />
-    <label *ngIf="submitted && adresseFormGroup.controls.cp.errors">
-      <span class="text-red-500" *ngIf="adresseFormGroup.controls.cp.errors.required"> cp obligatoire </span>
+    <label *ngIf="submitted && adresseFormGroup.controls.cp.errors" class="text-red-500">
+      <span *ngIf="adresseFormGroup.controls.cp.errors.required"> cp obligatoire </span>
     </label>
   </div>
 

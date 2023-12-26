@@ -9,7 +9,7 @@
             type="text"
             ngModel
             name="localite"
-            placeholder="Type here"
+            placeholder="Localité"
             class="input input-bordered input-primary w-full max-w-xs join-item"
           />
           <button class="btn btn-primary join-item">Rechercher</button>
@@ -71,7 +71,7 @@
             </thead>
             <tbody>
               <tr class="w-full">
-                <td colspan="4" classs="text-center">Aucun adresse</td>
+                <td colspan="4" classs="text-center">Aucune adresse</td>
               </tr>
             </tbody>
           </table>
@@ -98,7 +98,11 @@
     <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
     <div class="menu p-4 min-h-screen w-80 bg-base-200 text-base-content">
       <app-newadresses *ngIf="drawerMode === DrawerMode.add"></app-newadresses>
-      <app-editadresses *ngIf="drawerMode === DrawerMode.edit" [adresse]="adresseSelected"></app-editadresses>
+      <app-editadresses
+        *ngIf="drawerMode === DrawerMode.edit"
+        [adresse]="adresseSelected"
+        (adresseChange)="onAdresseEdited($event)"
+      ></app-editadresses>
     </div>
   </div>
 </div>

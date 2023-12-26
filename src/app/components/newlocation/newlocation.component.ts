@@ -103,9 +103,6 @@ export class NewlocationComponent implements OnInit, OnChanges {
     this.locationService.save(body).subscribe(
       data => {
         this.alertComponent?.show(AlertType.ok, 'sauvegarde ok');
-        setTimeout(() => {
-          this.alertComponent?.hide();
-        }, 5000);
         this.newLocation.emit(data);
       },
       err => {

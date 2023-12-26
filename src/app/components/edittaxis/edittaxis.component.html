@@ -12,10 +12,9 @@
         'input-error': submitted && taxiFormGroup.controls.immatriculation.errors
       }"
     />
-    <label *ngIf="submitted && taxiFormGroup.controls.immatriculation.errors">
-      <span class="text-red-500" *ngIf="taxiFormGroup.controls.immatriculation.errors.required">
-        immatriculation obligatoire
-      </span>
+    <label *ngIf="submitted && taxiFormGroup.controls.immatriculation.errors" class="text-red-500">
+      <span *ngIf="taxiFormGroup.controls.immatriculation.errors.pattern"> Mauvais format (T-ABC-123) </span>
+      <span *ngIf="taxiFormGroup.controls.immatriculation.errors.required"> immatriculation obligatoire </span>
     </label>
   </div>
 
@@ -32,8 +31,8 @@
         'input-error': submitted && taxiFormGroup.controls.carburant.errors
       }"
     />
-    <label *ngIf="submitted && taxiFormGroup.controls.carburant.errors">
-      <span class="text-red-500" *ngIf="taxiFormGroup.controls.carburant.errors.required"> carburant obligatoire </span>
+    <label *ngIf="submitted && taxiFormGroup.controls.carburant.errors" class="text-red-500">
+      <span *ngIf="taxiFormGroup.controls.carburant.errors.required"> carburant obligatoire </span>
     </label>
   </div>
   <div>
@@ -49,8 +48,8 @@
         'input-error': submitted && taxiFormGroup.controls.prixKm.errors
       }"
     />
-    <label *ngIf="submitted && taxiFormGroup.controls.prixKm.errors">
-      <span class="text-red-500" *ngIf="taxiFormGroup.controls.prixKm.errors.required"> prixKm obligatoire </span>
+    <label *ngIf="submitted && taxiFormGroup.controls.prixKm.errors" class="text-red-500">
+      <span *ngIf="taxiFormGroup.controls.prixKm.errors.required"> prixKm obligatoire </span>
     </label>
   </div>
 
