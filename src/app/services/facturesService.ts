@@ -38,4 +38,8 @@ export class FacturesService {
   updateFacture(c: Facture): Observable<Facture> {
     return this.http.put<Facture>(this.host + '/factures/' + c.location.id + '/' + c.taxi.id, c);
   }
+
+  getTotal(location: Location) {
+    return this.http.get<Number>(this.host + '/factures/total/' + location.id);
+  }
 }

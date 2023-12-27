@@ -24,6 +24,7 @@ export class FacturesComponent implements OnInit, OnChanges {
   taxis?: Taxi[];
   factureSelected?: Facture;
   isAdding: boolean = false;
+  total: number = 0;
 
   isSelected: boolean = false;
 
@@ -37,6 +38,8 @@ export class FacturesComponent implements OnInit, OnChanges {
     if (this.location != undefined) return;
     console.log('ngOnInit');
 
+    this.updateTotal();
+
     this.facturesService.getPaginatorFacturesByIdLocation(this.location!, 0, 4, 'cout').subscribe((data: any) => {
       this.factures = data.content;
       this.page = data.number;
@@ -49,6 +52,8 @@ export class FacturesComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     console.log('onchange');
 
+    this.updateTotal();
+
     if (changes.location && changes.location.currentValue && this.location !== undefined) {
       this.facturesService.getPaginatorFacturesByIdLocation(this.location, 0, 4, 'cout').subscribe((data: any) => {
         this.factures = data.content;
@@ -58,6 +63,12 @@ export class FacturesComponent implements OnInit, OnChanges {
         this.isButtonPreviousDisabled = data.first;
       });
     }
+  }
+
+  updateTotal() {
+    this.facturesService.getTotal(this.location!).subscribe((data: any) => {
+      this.total = data;
+    });
   }
 
   pageNext() {
@@ -139,6 +150,8 @@ export class FacturesComponent implements OnInit, OnChanges {
           AlertType.ok,
           'Facture ' + this.factureSelected.location.id + ' ' + this.factureSelected.taxi.id + ' supprimé',
         );
+        this.updateTotal();
+
         /*
         if (!(index === undefined) && index > -1) {
           this.factures?.splice(index, 1);
@@ -172,6 +185,7 @@ export class FacturesComponent implements OnInit, OnChanges {
     this.facturesService.updateFacture(body).subscribe(
       data => {
         this.alertComponent?.show(AlertType.ok, 'sauvegarde ok');
+        this.updateTotal();
       },
       err => {
         this.alertComponent?.show(AlertType.error, err.headers.get('error'));
@@ -181,5 +195,6 @@ export class FacturesComponent implements OnInit, OnChanges {
 
   onAddFacture(facture: Facture) {
     this.reloadCurrentPage(this.page);
+    this.updateTotal();
   }
 }

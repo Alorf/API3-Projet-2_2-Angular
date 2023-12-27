@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="flex py-2">
+  <div class="flex py-2 justify-between">
     <div class="flex flex-row">
       <div class="join">
         <button class="join-item btn btn-primary" (click)="onNewFacture()">Ajouter</button>
@@ -8,6 +8,7 @@
         <button class="join-item btn" [disabled]="isButtonNextDisabled" (click)="pageNext()">»</button>
       </div>
     </div>
+    <button class="btn btn-primary">{{ total | currency : 'EUR' }}</button>
   </div>
 
   <ng-container *ngIf="factures">
