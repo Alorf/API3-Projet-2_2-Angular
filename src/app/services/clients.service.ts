@@ -22,6 +22,11 @@ export class ClientsService {
     return this.http.get<Client[]>(this.host + '/clients/all');
   }
 
+  /* Q1 EXAMEN */
+  getKmTotalClient(id: number): Observable<number> {
+    return this.http.get<number>(this.host + '/clients/kmtotal/' + id);
+  }
+
   searchClients(nom: string): Observable<Client[]> {
     return this.http.get<Client[]>(this.host + '/clients/nom=' + nom);
   }

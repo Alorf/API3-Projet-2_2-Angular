@@ -36,17 +36,21 @@
                   <th>Prénom</th>
                   <th>Mail</th>
                   <th>Téléphone</th>
+                  <!-- Q1 EXAMEN -->
+                  <th>KmParcouru</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 <!-- row 1 -->
-                <tr *ngFor="let c of clients">
+                <tr *ngFor="let c of clientsToShow">
                   <th>{{ c.id }}</th>
                   <td>{{ c.nom }}</td>
                   <td>{{ c.prenom }}</td>
                   <td>{{ c.mail }}</td>
                   <td>{{ c.tel }}</td>
+                  <!-- EXAMEN -->
+                  <td>{{ c.kmTotal }} kilomètre(s)</td>
                   <td class="join">
                     <button class="join-item btn btn-success" (click)="editClient(c)">Modifier</button>
                     <button class="join-item btn btn-primary" (click)="openFilterDrawer(c)">Voir</button>

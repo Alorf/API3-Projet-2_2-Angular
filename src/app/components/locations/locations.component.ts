@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, Output, OnInit, ViewChild, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, ElementRef, Input, Output, OnInit, ViewChild, SimpleChanges, OnChanges, EventEmitter } from '@angular/core';
 import { DrawerMode } from '../tools/Enum/drawer-mode';
 import { AlertComponent } from '../tools/alert/alert.component';
 import { LocationsService } from '../../services/locations.service';
@@ -32,6 +32,8 @@ export class LocationsComponent implements OnInit, OnChanges {
 
   locations?: Location[];
   locationSelected?: Location;
+  /* EXAMEN */
+  totalLocations: number = 0;
 
   constructor(private locationsService: LocationsService, private router: Router) {}
 
@@ -66,6 +68,9 @@ export class LocationsComponent implements OnInit, OnChanges {
   }
 
   pageNext() {
+    /* EXAMEN */
+    this.totalLocations = 0;
+
     this.locationsService.getPaginatorLocations(++this.page, 5, 'id').subscribe((data: any) => {
       this.locations = data.content;
 
@@ -75,6 +80,9 @@ export class LocationsComponent implements OnInit, OnChanges {
   }
 
   reloadCurrentPage(page: number = this.page) {
+    /* EXAMEN */
+    this.totalLocations = 0;
+
     this.locationsService.getPaginatorLocations(page, 5, 'id').subscribe((data: any) => {
       this.locations = data.content;
       this.page = data.number;
@@ -85,6 +93,9 @@ export class LocationsComponent implements OnInit, OnChanges {
   }
 
   pagePrevious() {
+    /* EXAMEN */
+    this.totalLocations = 0;
+
     this.locationsService.getPaginatorLocations(--this.page, 5, 'id').subscribe((data: any) => {
       this.locations = data.content;
 
@@ -220,6 +231,12 @@ export class LocationsComponent implements OnInit, OnChanges {
           return;
         }
         this.locations = data;
+        /* Q2 EXAMEN */
+        this.totalLocations = 0;
+        /* EXAMEN */
+        this.locations?.forEach(location => {
+          this.totalLocations += location.kmTotal;
+        });
       });
     }
   }

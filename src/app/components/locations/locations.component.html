@@ -21,6 +21,10 @@
             class="input input-bordered input-primary w-full max-w-xs join-item"
           />
           <button class="btn btn-primary join-item">Rechercher entre deux date</button>
+          <!-- Q2 EXAMEN -->
+          <span *ngIf="totalLocations != 0">
+            <button class="btn btn-secondary join-item">{{ totalLocations }} kilomètre(s)</button>
+          </span>
         </form>
         <div class="flex flex-row">
           <div class="join">

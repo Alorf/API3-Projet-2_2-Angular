@@ -28,6 +28,8 @@ export class ClientsComponent implements OnInit {
 
   clients?: Client[];
   clientSelected?: Client;
+  /* EXAMEN */
+  clientsToShow?: any[];
 
   isSelected: boolean = false;
 
@@ -40,26 +42,46 @@ export class ClientsComponent implements OnInit {
   ngOnInit(): void {
     this.clientsService.getPaginatorClients(0, 5, 'nom').subscribe((data: any) => {
       this.clients = data.content;
+      /* Q1 EXAMEN */
+      this.setKmParcouruClients(this.clients!);
 
       this.isButtonNextDisabled = data.last;
       this.isButtonPreviousDisabled = data.first;
     });
   }
 
+
+  /* Q1 EXAMEN */
+  setKmParcouruClients(clients : Client[]){
+    this.clientsToShow = clients;
+    if (this.clientsToShow == undefined || this.clientsToShow.length == 0) return;
+
+    this.clientsToShow?.forEach(element => {
+
+      this.clientsService.getKmTotalClient(element.id).subscribe((data: any) => {
+        element.kmTotal = data;
+      });
+
+    });    
+  }
+
   pageNext() {
     this.clientsService.getPaginatorClients(++this.page, 5, 'nom').subscribe((data: any) => {
       this.clients = data.content;
+      /* Q1 EXAMEN */
+      this.setKmParcouruClients(this.clients!);
 
-      if (data.last) {
-        this.isButtonNextDisabled = true;
-        this.isButtonPreviousDisabled = false;
-      }
+      this.isButtonNextDisabled = data.last;
+      this.isButtonPreviousDisabled = data.first;
     });
   }
 
   reloadCurrentPage(page: number = this.page) {
     this.clientsService.getPaginatorClients(page, 5, 'nom').subscribe((data: any) => {
       this.clients = data.content;
+      /* Q1 EXAMEN */
+      this.setKmParcouruClients(this.clients!);
+
       this.page = data.number;
 
       this.isButtonNextDisabled = data.last;
@@ -70,6 +92,8 @@ export class ClientsComponent implements OnInit {
   pagePrevious() {
     this.clientsService.getPaginatorClients(--this.page, 5, 'nom').subscribe((data: any) => {
       this.clients = data.content;
+      /* Q1 EXAMEN */
+      this.setKmParcouruClients(this.clients!);
 
       this.isButtonNextDisabled = data.last;
       this.isButtonPreviousDisabled = data.first;
@@ -82,8 +106,9 @@ export class ClientsComponent implements OnInit {
     } else {
       this.alertComponent?.hide();
       this.clientsService.searchClients(value.nom).subscribe((data: any) => {
-        this.clients = data;
-      });
+      this.clients = data.content;
+      /* Q1 EXAMEN */
+      this.setKmParcouruClients(this.clients!);      });
     }
   }
 
